@@ -1,10 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -132,20 +126,23 @@ class Pokemon {
     }
 
     private static String loadDescriptionFromFile(String pokemonName) throws IOException {
-        String folderPath = "C:\\Users\\hp\\Desktop\\Ryu Files\\Codes\\Java\\PokemonManager\\src\\pokemon_descriptions";  // Assuming the folder is directly under the 'src' directory
+        String folderPath = "src" + File.separator + "pokemon_descriptions" + File.separator;  // Assuming the folder is directly under the 'src' directory
         String fileName = pokemonName + ".txt";
-        Path filePath = Paths.get(folderPath, fileName);
+        String filePath = folderPath + fileName;
+        File pokemon_descriptionFile = new File(filePath);
 
         System.out.println("File Path: " + filePath);
 
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(pokemon_descriptionFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            throw new IOException("Error loading description: " + filePath, e);
+            System.out.println("Working directory: " + System.getProperty("user.dir"));
+            e.printStackTrace();
+            throw new IOException("Error loading description: " + folderPath + fileName, e);
         }
 
         return content.toString();
