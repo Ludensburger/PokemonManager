@@ -131,7 +131,6 @@ class Pokemon {
         String filePath = folderPath + fileName;
         File pokemon_descriptionFile = new File(filePath);
 
-        System.out.println("Absolute path " + pokemon_descriptionFile.getAbsolutePath());
         System.out.println("File Path: " + filePath);
 
         StringBuilder content = new StringBuilder();
