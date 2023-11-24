@@ -132,6 +132,7 @@ class Pokemon {
     private static String loadDescriptionFromFile(String pokemonName) throws IOException {
         String folderPath = "pokemon_descriptions/";  // Assuming the folder is directly under the 'src' directory
         String fileName = pokemonName + ".txt";
+        
         InputStream inputStream = Pokemon.class.getClassLoader().getResourceAsStream(folderPath + fileName);
 
         if(inputStream == null) {
