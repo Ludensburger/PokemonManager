@@ -139,12 +139,23 @@ public class Pokedex{
                 }
                 if(id != null && name != null && type != null && description != null) {
                     Pokemon storedPokemon;
+                    boolean isIdTaken = false;
+                    int idNo = Integer.parseInt(id);
                     if(type.contains("/")) {
-                        storedPokemon = new Pokemon(name, Integer.parseInt(id), description, type, true);
+                        storedPokemon = new Pokemon(name, idNo, description, type, true);
                     } else {
-                        storedPokemon = new Pokemon(name, Integer.parseInt(id), description, type, false);
+                        storedPokemon = new Pokemon(name, idNo, description, type, false);
                     }
-                    PokemonList.add(storedPokemon);
+
+                    for(Pokemon pokemon : PokemonList) {
+                        if (pokemon.getId() == idNo) {
+                            isIdTaken = true;
+                            break;
+                        }
+                    }
+                    if(!isIdTaken) {
+                        PokemonList.add(storedPokemon);
+                    }
                 }
             }
         } catch (IOException e) {

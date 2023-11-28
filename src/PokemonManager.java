@@ -52,7 +52,7 @@ public class PokemonManager {
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
 
-        } while (choice != 6);
+        } while (choice != 8);
 
         scanner.close();
     }
