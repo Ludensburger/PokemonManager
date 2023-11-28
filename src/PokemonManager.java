@@ -1,22 +1,12 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.io.IOException;
 import java.util.Scanner;
 
-
-
 public class PokemonManager {
-    public static void main(String[] args) {
-
-
+    public static void main(String[] args) throws IOException {
         System.out.println("Current Working Directory: " + System.getProperty("user.dir"));
-
-        ArrayList<Pokemon> pokemonList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+        Pokedex.updatePokedex();
 
-        pokemonList.add(new Pokemon("Bulbasaur", "Grass/Poison"));
-        pokemonList.add(new Pokemon("Charmander", "Fire"));
-        pokemonList.add(new Pokemon("Squirtle", "Water"));
 
         int choice;
 
@@ -27,34 +17,42 @@ public class PokemonManager {
             System.out.println("3. Sort by Name");
             System.out.println("4. Sort by Type");
             System.out.println("5. Select Pokemon");
-            System.out.println("6. Exit");
+            System.out.println("6. Update Pokedex");
+            System.out.println("7. Save Pokedex");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
-                    Pokemon.addPokemon(pokemonList, scanner);
+                    Pokedex.addPokemon();
                     break;
                 case 2:
-                    Pokemon.showPokemonList(pokemonList);
+                    Pokedex.showPokemonList();
                     break;
                 case 3:
-                    Pokemon.sortByName(pokemonList);
+                    Pokedex.sortByName();
                     break;
                 case 4:
-                    Pokemon.sortByType(pokemonList);
+                    Pokedex.sortByType();
                     break;
                 case 5:
-                    Pokemon.selectPokemon(pokemonList, scanner);
+                    Pokedex.selectPokemon();
                     break;
                 case 6:
+                    Pokedex.updatePokedex();
+                    break;
+                case 7:
+                    Pokedex.savePokedex();
+                    break;
+                case 8:
                     System.out.println("Exiting the program. Goodbye!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
 
-        } while (choice != 6);
+        } while (choice != 8);
 
         scanner.close();
     }
