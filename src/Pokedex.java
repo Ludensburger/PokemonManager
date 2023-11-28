@@ -116,6 +116,7 @@ public class Pokedex{
             String name = null;
             String type = null;
             String description = null;
+            Set<String> pokemonChecked = new HashSet<String>();
 
             /*
                 reads each line of file until it reaches EOF
@@ -133,19 +134,24 @@ public class Pokedex{
                 }
                 if (line.contains("type:")) {
                     type = line.substring(5).trim();
+                    System.out.println(type);
                 }
                 if (line.contains("desc:")) {
                     description = line.substring(5).trim();
                 }
+
                 if(id != null && name != null && type != null && description != null) {
                     Pokemon storedPokemon;
                     boolean isIdTaken = false;
                     int idNo = Integer.parseInt(id);
+
                     if(type.contains("/")) {
                         storedPokemon = new Pokemon(name, idNo, description, type, true);
                     } else {
                         storedPokemon = new Pokemon(name, idNo, description, type, false);
                     }
+
+                    System.out.println(storedPokemon.getName());
 
                     for(Pokemon pokemon : PokemonList) {
                         if (pokemon.getId() == idNo) {
@@ -155,7 +161,14 @@ public class Pokedex{
                     }
                     if(!isIdTaken) {
                         PokemonList.add(storedPokemon);
+
                     }
+
+
+                    id = null;
+                    name = null;
+                    type = null;
+                    description = null;
                 }
             }
         } catch (IOException e) {
