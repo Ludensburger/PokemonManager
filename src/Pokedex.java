@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 /**
- *  Pokedex class that handles various tasks such as:
+ *  Pokédex class that handles various tasks such as:
  *      1. Initializing ArrayList of Pokemon called 'PokemonList'
  *      2. Adding objects to PokemonList through addPokemon();
  *      3. Displaying PokemonList through showPokemonList();
@@ -12,14 +12,12 @@ import java.util.*;
  *          updatePokedex()
  *      7. Select Pokemon from PokemonList to display more of their details
  *         through selectPokemon()
- *
- *
  *   NOTE:
  *      Run savePokedex() to store files locally.
  *
  */
 public class Pokedex{
-    static List<Pokemon> PokemonList = new ArrayList<Pokemon>();
+    static List<Pokemon> PokemonList = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
     static void addPokemon() {
@@ -116,7 +114,6 @@ public class Pokedex{
             String name = null;
             String type = null;
             String description = null;
-            Set<String> pokemonChecked = new HashSet<String>();
 
             /*
                 reads each line of file until it reaches EOF
@@ -134,7 +131,6 @@ public class Pokedex{
                 }
                 if (line.contains("type:")) {
                     type = line.substring(5).trim();
-                    System.out.println(type);
                 }
                 if (line.contains("desc:")) {
                     description = line.substring(5).trim();
@@ -151,8 +147,6 @@ public class Pokedex{
                         storedPokemon = new Pokemon(name, idNo, description, type, false);
                     }
 
-                    System.out.println(storedPokemon.getName());
-
                     for(Pokemon pokemon : PokemonList) {
                         if (pokemon.getId() == idNo) {
                             isIdTaken = true;
@@ -161,7 +155,6 @@ public class Pokedex{
                     }
                     if(!isIdTaken) {
                         PokemonList.add(storedPokemon);
-
                     }
 
 
@@ -180,7 +173,6 @@ public class Pokedex{
         System.out.print("Enter the name of the Pokemon: ");
         String selectedName = scanner.next();
 
-        Pokemon selectedPokemon;
         for(Pokemon pokemon : PokemonList) {
             if(pokemon.getName().equalsIgnoreCase(selectedName)) {
                 displayPokemonDetails(pokemon);
