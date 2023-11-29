@@ -170,6 +170,7 @@ public class Pokedex{
                     description = null;
                 }
             }
+        br.close();
         } catch (IOException e) {
             throw new IOException(e);
         }
