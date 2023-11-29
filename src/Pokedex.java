@@ -32,6 +32,7 @@ public class Pokedex{
 
         System.out.print("Enter name of pokemon: ");
         name = scanner.nextLine();
+        name = name.toUpperCase();
 
         System.out.print("Describe your pokemon: ");
         description = scanner.nextLine();
