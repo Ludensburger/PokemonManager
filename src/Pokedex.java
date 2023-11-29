@@ -24,7 +24,7 @@ public class Pokedex{
         String yn;
         String name;
         PokemonType singleType;
-        PokemonType dualType;
+        PokemonType dualType = null;
         String type;
         String description;
 
@@ -43,7 +43,12 @@ public class Pokedex{
         singleType = PokemonType.pickType();
 
         if (Objects.equals(yn, "Y") || Objects.equals(yn, "y")) {
-            dualType = PokemonType.pickType();
+            do {
+                dualType = PokemonType.pickType();
+                if(dualType == singleType) {
+                    System.out.println("A pokemon can't have two of the same type!");
+                }
+            } while(dualType == singleType);
             type = singleType + "/" + dualType;
             newPokemon = new Pokemon(name, PokemonList.size() + 1, description, type, true);
         } else {
