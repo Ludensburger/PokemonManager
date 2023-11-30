@@ -28,7 +28,7 @@ public class Pokedex{
         String yn;
         String name;
         PokemonType singleType;
-        PokemonType dualType = null;
+        PokemonType dualType;
         String type;
         String description;
 
@@ -92,7 +92,7 @@ public class Pokedex{
 
         File pokeFile = new File(filePath);
         try {
-           BufferedWriter br = new BufferedWriter(new FileWriter(pokeFile));
+            BufferedWriter br = new BufferedWriter(new FileWriter(pokeFile));
             for(Pokemon pokemon : PokemonList) {
                 String pokeObject = "\nid:" + pokemon.getId() +
                         "\nname:" + pokemon.getName() +

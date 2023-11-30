@@ -35,3 +35,4 @@ id:9
 name:BLASTOISE
 type:WATER
 desc:A brutal POKéMON with pressurized water jets on its shell. They are used for high speed tackles.
+
