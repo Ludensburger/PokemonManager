@@ -7,3 +7,31 @@ id:2
 name:IVYSAUR
 type:GRASS/POISON
 desc:Evolution of Bulbasaur
+id:3
+name:VENUSAUR
+type:GRASS/POISON
+desc:Venusaur is a large, quadrupedal Pokémon with a turquoise body. 
+id:4
+name:CHARMANDER
+type:FIRE
+desc:Charmander is a bipedal, reptilian Pokémon.
+id:5
+name:CHARMELEON
+type:FIRE
+desc:When it swings its burning tail, it elevates the temperature to unbearably high levels.
+id:6
+name:CHARIZARD
+type:FIRE
+desc:Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally.
+id:7
+name:SQUIRTLE
+type:WATER
+desc:After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.
+id:8
+name:WARTORTLE
+type:WATER
+desc:Often hides in water to stalk unwary prey. For swimming fast, it moves its ears to maintain balance.
+id:9
+name:BLASTOISE
+type:WATER
+desc:A brutal POKéMON with pressurized water jets on its shell. They are used for high speed tackles.

@@ -20,6 +20,10 @@ public class Pokedex{
     static List<Pokemon> PokemonList = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
+    public static List<Pokemon> getPokemonList() {
+        return PokemonList;
+    }
+
     static void addPokemon() {
         String yn;
         String name;
@@ -190,7 +194,7 @@ public class Pokedex{
         System.out.println("Pokemon not found.");
 
     }
-
+    
     private static void displayPokemonDetails(Pokemon pokemon) {
         System.out.println("Pokemon Details:");
         System.out.println("ID: " + pokemon.getId());
