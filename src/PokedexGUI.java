@@ -75,7 +75,8 @@ public class PokedexGUI extends JFrame {
         app.setTitle("Pokedex");
         app.setIconImage(icon.getImage());
         app.setVisible(true);
-        app.setResizable(false);
+        app.setLocationRelativeTo(null);
+        app.setResizable(true);
     }
 
 
@@ -112,6 +113,12 @@ public class PokedexGUI extends JFrame {
 
         backButton.addActionListener(e -> {
             setPageSet(getPageSet() - 6);
+
+            // ensures that it doesn't traverse to the negative pages because there is no such thing as negative page
+            if(getPageSet() < 0) {
+                int lastPageIndex = PokemonObjects.size() - 6;
+                setPageSet(0);
+            }
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
             System.out.println(getPageSet());
         });
