@@ -75,8 +75,7 @@ public class PokedexGUI extends JFrame {
         app.setTitle("Pokedex");
         app.setIconImage(icon.getImage());
         app.setVisible(true);
-        app.setLocationRelativeTo(null);
-        app.setResizable(true);
+        app.setResizable(false);
     }
 
 
@@ -113,12 +112,6 @@ public class PokedexGUI extends JFrame {
 
         backButton.addActionListener(e -> {
             setPageSet(getPageSet() - 6);
-
-            // ensures that it doesn't traverse to the negative pages because there is no such thing as negative page
-            if(getPageSet() < 0) {
-                int lastPageIndex = PokemonObjects.size() - 6;
-                setPageSet(0);
-            }
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
             System.out.println(getPageSet());
         });
@@ -171,7 +164,6 @@ public class PokedexGUI extends JFrame {
         if(isPokemon) {
             String name = PokemonObjects.get(PokemonIndex).getName();
             String idNumber = "#" + String.format("%03d", PokemonObjects.get(PokemonIndex).getId());
-            String idString = "#" + idNumber;
             String type = PokemonObjects.get(PokemonIndex).getType();
             String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + idNumber.substring(1) + ".png";
             ImageIcon icon;
@@ -186,7 +178,7 @@ public class PokedexGUI extends JFrame {
             }
 
             LabelNames.get(PanelIndex).setText(name);
-            LabelNumbers.get(PanelIndex).setText(idString);
+            LabelNumbers.get(PanelIndex).setText(idNumber);
             LabelTypes.get(PanelIndex).setText(type);
             LabelImages.get(PanelIndex).setText("");
             LabelImages.get(PanelIndex).setIcon(icon);
