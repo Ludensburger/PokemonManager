@@ -1,18 +1,18 @@
+package pokemon.ui;
+
+import pokemon.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
 public class PokedexGUI extends JFrame {
-    List<Pokemon> PokemonObjects = Pokedex.getPokemonList();
     private JPanel pnlPokedex;
     private JPanel pnlSearch;
     private JTextField txtSearch;
@@ -51,21 +51,32 @@ public class PokedexGUI extends JFrame {
     private JLabel lblType6;
     private JLabel lblType3;
 
-    private int pageSet;
+    Pokedex pokedex;
 
-    public int getPageSet() {
-        return pageSet;
-    }
-
-    public void setPageSet(int pageSet) {
-        if(pageSet < 0  || pageSet > PokemonObjects.size()) {
-            return;
-        } else {
-            this.pageSet = pageSet;
+    {
+        pokedex = new Pokedex();
+        try {
+            pokedex.startPokedex();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    ArrayList<Pokemon> PokemonObjects = pokedex.getPokemonArrayList();
+    private int PAGE;
+
+    public int getPAGE() {
+        return PAGE;
+    }
+
+    public void setPAGE(int PAGE) {
+        if(PAGE < 0 || PAGE > PokemonObjects.size()) {
+            return;
+        }
+        this.PAGE = PAGE;
+    }
+
+    public static void main(String[] args){
         PokedexGUI app = new PokedexGUI();
         ImageIcon icon = new ImageIcon("src" + File.separator + "ico.png");
 
@@ -77,15 +88,7 @@ public class PokedexGUI extends JFrame {
         app.setVisible(true);
         app.setResizable(false);
     }
-
-
-    public PokedexGUI() {
-        try {
-            Pokedex.updatePokedex();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-
+    public PokedexGUI(){
         List<JLabel> LabelNames = new ArrayList<>();
         List<JLabel> LabelNumbers = new ArrayList<>();
         List<JLabel> LabelImages = new ArrayList<>();
@@ -104,13 +107,27 @@ public class PokedexGUI extends JFrame {
         });
 
         nextButton.addActionListener(e -> {
-            setPageSet(getPageSet() + 6);
+            setPAGE(getPAGE() + 1);
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
         });
 
         backButton.addActionListener(e -> {
-            setPageSet(getPageSet() - 6);
+            setPAGE(getPAGE() - 1);
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
+        });
+        pnlPokemon1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pnlPokemon1.setBackground(Color.red);
+                super.mousePressed(e);
+            }
+        });
+        pnlPokemon1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                pnlPokemon1.setBackground(Color.black);
+                super.mouseReleased(e);
+            }
         });
     }
 
@@ -130,10 +147,11 @@ public class PokedexGUI extends JFrame {
             }
         }
 
-        int PokemonActiveSearchIndexCount = getPageSet();
+        int PokemonActiveSearchIndexCount = getPAGE() * 6;
         for(int i = 0; i < 6; i++) {
             displayPokemonToPanels(PokemonActiveSearch, LabelNames, LabelImages, LabelNumbers, LabelTypes, PokemonActiveSearchIndexCount,  i, PokemonActiveSearchIndexCount++ < PokemonActiveSearch.size());
         }
+
     }
 
     public void initializePokemonToPanels(
