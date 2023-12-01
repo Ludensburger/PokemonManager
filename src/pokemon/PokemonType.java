@@ -1,3 +1,5 @@
+package pokemon;
+
 import java.util.Scanner;
 /**
  *  All pokemon types in the Pokemon franchise as of November 29, 2023.
