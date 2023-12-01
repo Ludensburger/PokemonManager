@@ -2,44 +2,38 @@
 id:1
 name:BULBASAUR
 type:GRASS/POISON
-desc:A small, quadrupedal amphibian Pokemon that has blue-green skin with darker patches.
+desc:THERE IS A PLANT SEED ON ITS BACK RIGHT FROM THE DAY THIS POKÉMON IS BORN. THE SEED SLOWLY GROWS LARGER.
 id:2
 name:IVYSAUR
 type:GRASS/POISON
-desc:Evolution of Bulbasaur
+desc:WHEN THE BULB ON ITS BACK GROWS LARGE, IT APPEARS TO LOSE THE ABILITY TO STAND ON ITS HIND LEGS.
 id:3
 name:VENUSAUR
 type:GRASS/POISON
-desc:Venusaur is a large, quadrupedal Pokémon with a turquoise body.
+desc:ITS PLANT BLOOMS WHEN IT IS ABSORBING SOLAR ENERGY. IT STAYS ON THE MOVE TO SEEK SUNLIGHT.
 id:4
 name:CHARMANDER
 type:FIRE
-desc:Charmander is a bipedal, reptilian Pokémon.
+desc:IT HAS A PREFERENCE FOR HOT THINGS. WHEN IT RAINS, STEAM IS SAID TO SPOUT FROM THE TIP OF ITS TAIL.
 id:5
 name:CHARMELEON
 type:FIRE
-desc:When it swings its burning tail, it elevates the temperature to unbearably high levels.
+desc:IT HAS A BARBARIC NATURE. IN BATTLE, IT WHIPS ITS FIERY TAIL AROUND AND SLASHES AWAY WITH SHARP CLAWS.
 id:6
 name:CHARIZARD
 type:FIRE
-desc:Spits fire that is hot enough to melt boulders. Known to cause forest fires unintentionally.
+desc:IT IS SAID THAT CHARIZARD’S FIRE BURNS HOTTER IF IT HAS EXPERIENCED HARSH BATTLES.
 id:7
 name:SQUIRTLE
 type:WATER
-desc:After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.
+desc:WHEN IT RETRACTS ITS LONG NECK INTO ITS SHELL, IT SQUIRTS OUT WATER WITH VIGOROUS FORCE.
 id:8
 name:WARTORTLE
 type:WATER
-desc:Often hides in water to stalk unwary prey. For swimming fast, it moves its ears to maintain balance.
+desc:IT IS RECOGNIZED AS A SYMBOL OF LONGEVITY. IF ITS SHELL HAS ALGAE ON IT, THAT WARTORTLE IS VERY OLD.
 id:9
 name:BLASTOISE
 type:WATER
-desc:A brutal POKéMON with pressurized water jets on its shell. They are used for high speed tackles.
-id:10
-name:TEST1
-type:POISON
-desc:Testing 1
-id:11
-name:TEST2
-type:DARK/STEEL
-desc:Testing numba 2
+desc:IT CRUSHES ITS FOE UNDER ITS HEAVY BODY TO CAUSE FAINTING. IN A PINCH, IT WILL WITHDRAW INSIDE ITS SHELL.
+
+
