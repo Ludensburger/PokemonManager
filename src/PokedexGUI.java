@@ -164,7 +164,6 @@ public class PokedexGUI extends JFrame {
         if(isPokemon) {
             String name = PokemonObjects.get(PokemonIndex).getName();
             String idNumber = "#" + String.format("%03d", PokemonObjects.get(PokemonIndex).getId());
-            String idString = "#" + idNumber;
             String type = PokemonObjects.get(PokemonIndex).getType();
             String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + idNumber.substring(1) + ".png";
             ImageIcon icon;
@@ -179,7 +178,7 @@ public class PokedexGUI extends JFrame {
             }
 
             LabelNames.get(PanelIndex).setText(name);
-            LabelNumbers.get(PanelIndex).setText(idString);
+            LabelNumbers.get(PanelIndex).setText(idNumber);
             LabelTypes.get(PanelIndex).setText(type);
             LabelImages.get(PanelIndex).setText("");
             LabelImages.get(PanelIndex).setIcon(icon);
