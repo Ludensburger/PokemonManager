@@ -10,7 +10,7 @@ desc:Evolution of Bulbasaur
 id:3
 name:VENUSAUR
 type:GRASS/POISON
-desc:Venusaur is a large, quadrupedal Pokémon with a turquoise body. 
+desc:Venusaur is a large, quadrupedal Pokémon with a turquoise body.
 id:4
 name:CHARMANDER
 type:FIRE
@@ -35,4 +35,11 @@ id:9
 name:BLASTOISE
 type:WATER
 desc:A brutal POKéMON with pressurized water jets on its shell. They are used for high speed tackles.
-
+id:10
+name:TEST1
+type:POISON
+desc:Testing 1
+id:11
+name:TEST2
+type:DARK/STEEL
+desc:Testing numba 2
