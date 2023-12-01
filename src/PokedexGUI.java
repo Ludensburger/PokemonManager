@@ -99,7 +99,6 @@ public class PokedexGUI extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-                System.out.println(pnlPokemon4.getWidth() + ", " + pnlPokemon4.getHeight());
                 super.keyReleased(e);
             }
         });
@@ -107,13 +106,11 @@ public class PokedexGUI extends JFrame {
         nextButton.addActionListener(e -> {
             setPageSet(getPageSet() + 6);
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-            System.out.println(getPageSet());
         });
 
         backButton.addActionListener(e -> {
             setPageSet(getPageSet() - 6);
             updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-            System.out.println(getPageSet());
         });
     }
 
@@ -135,7 +132,7 @@ public class PokedexGUI extends JFrame {
 
         int PokemonActiveSearchIndexCount = getPageSet();
         for(int i = 0; i < 6; i++) {
-            displayPokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes, PokemonActiveSearchIndexCount,  i, PokemonActiveSearchIndexCount++ < PokemonActiveSearch.size());
+            displayPokemonToPanels(PokemonActiveSearch, LabelNames, LabelImages, LabelNumbers, LabelTypes, PokemonActiveSearchIndexCount,  i, PokemonActiveSearchIndexCount++ < PokemonActiveSearch.size());
         }
     }
 
