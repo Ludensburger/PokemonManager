@@ -58,12 +58,11 @@ public class PokedexGUI extends JFrame {
     }
 
     public void setPageSet(int pageSet) {
-        if(pageSet < 0) {
-            setPageSet(0);
-        } else if (pageSet > PokemonObjects.size()) {
+        if(pageSet < 0  || pageSet > PokemonObjects.size()) {
             return;
+        } else {
+            this.pageSet = pageSet;
         }
-        this.pageSet = pageSet;
     }
 
     public static void main(String[] args) throws IOException {
@@ -91,15 +90,16 @@ public class PokedexGUI extends JFrame {
         List<JLabel> LabelNumbers = new ArrayList<>();
         List<JLabel> LabelImages = new ArrayList<>();
         List<JLabel> LabelTypes = new ArrayList<>();
+        List<JPanel> PanelPokemons = new ArrayList<>();
 
-        initializeLabels(LabelNames, LabelImages, LabelNumbers, LabelTypes);
+        initializeComponents(LabelNames, LabelImages, LabelNumbers, LabelTypes, PanelPokemons);
         initializePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-
 
         txtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
+                System.out.println(pnlPokemon4.getWidth() + ", " + pnlPokemon4.getHeight());
                 super.keyReleased(e);
             }
         });
@@ -135,38 +135,7 @@ public class PokedexGUI extends JFrame {
 
         int PokemonActiveSearchIndexCount = getPageSet();
         for(int i = 0; i < 6; i++) {
-            if(PokemonActiveSearchIndexCount < PokemonActiveSearch.size()) {
-                Pokemon pokemon = PokemonActiveSearch.get(PokemonActiveSearchIndexCount++);
-
-                String name = pokemon.getName();
-                String id = "#" + String.format("%03d", pokemon.getId());
-                String type = pokemon.getType();
-                String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + name + ".png";
-                System.out.println(imagePath);
-
-                ImageIcon icon;
-                try {
-                    BufferedImage img = null;
-                    Image rawImg = ImageIO.read(new File(imagePath));
-                    Image scaledImg = rawImg.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(scaledImg);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-                LabelNames.get(i).setText(name);
-                LabelNumbers.get(i).setText(id);
-                LabelTypes.get(i).setText(type);
-                LabelImages.get(i).setText("");
-                LabelImages.get(i).setIcon(icon);
-            } else {
-                LabelNames.get(i).setText("???");
-                LabelNumbers.get(i).setText("???");
-                LabelTypes.get(i).setText("???");
-                LabelImages.get(i).setIcon(null);
-                LabelImages.get(i).setText("???");
-            }
+            displayPokemonToPanels(PokemonObjects, LabelNames, LabelNumbers, LabelTypes, LabelImages, PokemonActiveSearchIndexCount,  i, PokemonActiveSearchIndexCount++ < PokemonActiveSearch.size());
         }
     }
 
@@ -178,48 +147,64 @@ public class PokedexGUI extends JFrame {
             List<JLabel> LabelTypes) {
 
         for (int i = 0; i < 6; i++) {
-            if (i < PokemonObjects.size()) {
-                Pokemon pokemon = PokemonObjects.get(i);
-                String name = pokemon.getName();
-                String id = "#" + String.format("%03d", pokemon.getId());
-                String type = pokemon.getType();
-                String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + name + ".png";
-                System.out.println(imagePath);
-                ImageIcon icon;
-                try {
-                    BufferedImage img = null;
-                    Image rawImg = ImageIO.read(new File(imagePath));
-                    Image scaledImg = rawImg.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(scaledImg);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                LabelNames.get(i).setText(name);
-                LabelNumbers.get(i).setText(id);
-                LabelTypes.get(i).setText(type);
-                LabelImages.get(i).setText("");
-                LabelImages.get(i).setIcon(icon);
-            } else {
-                LabelNames.get(i).setText("???");
-                LabelNumbers.get(i).setText("???");
-                LabelTypes.get(i).setText("???");
-                LabelImages.get(i).setIcon(null);
-                LabelImages.get(i).setText("???");
-            }
+            displayPokemonToPanels(PokemonObjects, LabelNames, LabelNumbers, LabelTypes, LabelImages, i,  i, i <  PokemonObjects.size());
         }
     }
 
-    public void initializeLabels(
+    public void displayPokemonToPanels(
+            List<Pokemon> PokemonObjects,
             List<JLabel> LabelNames,
             List<JLabel> LabelImages,
             List<JLabel> LabelNumbers,
-            List<JLabel> LabelTypes) {
+            List<JLabel> LabelTypes,
+            int PokemonIndex,
+            int PanelIndex,
+            Boolean isPokemon) {
+
+        if(isPokemon) {
+            String name = PokemonObjects.get(PokemonIndex).getName();
+            String idNumber = "#" + String.format("%03d", PokemonObjects.get(PokemonIndex).getId());
+            String idString = "#" + idNumber;
+            String type = PokemonObjects.get(PokemonIndex).getType();
+            String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + idNumber.substring(1) + ".png";
+            ImageIcon icon;
+
+            try {
+                BufferedImage img = null;
+                Image rawImg = ImageIO.read(new File(imagePath));
+                Image scaledImg = rawImg.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(scaledImg);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            LabelNames.get(PanelIndex).setText(name);
+            LabelNumbers.get(PanelIndex).setText(idString);
+            LabelTypes.get(PanelIndex).setText(type);
+            LabelImages.get(PanelIndex).setText("");
+            LabelImages.get(PanelIndex).setIcon(icon);
+        } else {
+            LabelNames.get(PanelIndex).setText("???");
+            LabelNumbers.get(PanelIndex).setText("???");
+            LabelTypes.get(PanelIndex).setText("???");
+            LabelImages.get(PanelIndex).setIcon(null);
+            LabelImages.get(PanelIndex).setText("???");
+        }
+    }
+
+    public void initializeComponents(
+            List<JLabel> LabelNames,
+            List<JLabel> LabelImages,
+            List<JLabel> LabelNumbers,
+            List<JLabel> LabelTypes,
+            List<JPanel> PanelPokemons) {
 
         //////////////////////// Adding to arrays
         Collections.addAll(LabelNames, lblName1, lblName2, lblName3, lblName4, lblName5, lblName6);
         Collections.addAll(LabelNumbers, lblNum1, lblNum2, lblNum3, lblNum4, lblNum5, lblNum6);
         Collections.addAll(LabelImages, lblImage1, lblImage2, lblImage3, lblImage4, lblImage5, lblImage6);
         Collections.addAll(LabelTypes, lblType1, lblType2, lblType3, lblType4, lblType5, lblType6);
+        Collections.addAll(PanelPokemons, pnlPokemon1, pnlPokemon2, pnlPokemon3, pnlPokemon4, pnlPokemon5, pnlPokemon6);
         /////////////////////////
     }
 

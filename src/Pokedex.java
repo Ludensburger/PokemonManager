@@ -35,11 +35,10 @@ public class Pokedex{
         Pokemon newPokemon;
 
         System.out.print("Enter name of pokemon: ");
-        name = scanner.nextLine();
-        name = name.toUpperCase();
+        name = scanner.nextLine().toUpperCase();
 
         System.out.print("Describe your pokemon: ");
-        description = scanner.nextLine();
+        description = scanner.nextLine().toUpperCase();
 
         System.out.print("Does your pokemon have two types? [Y/N]: ");
         yn = scanner.nextLine();
