@@ -8,6 +8,9 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import static java.awt.Color.black;
+import static java.awt.Color.red;
+
 public class PokedexGUI extends JFrame{
 
     PokedexGUI() throws CloneNotSupportedException {
@@ -29,24 +32,32 @@ public class PokedexGUI extends JFrame{
             loc.y += 90;
         }
 
-        PokemonPanel currentPanel = new PokemonPanel();
-        currentPanel.getPokemonPanel().setBackground(Color.red);
+        pokemonPanels.get(pokemonPanels.size()/2).getPokemonPanel().setBackground(Color.red);
 
         addMouseWheelListener(new MouseWheelListener() {
+            int index = pokemonPanels.size() / 2;
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 int amount = (e.getWheelRotation());
-                int index = pokemonPanels.size() / 2;
-
-                if(amount == 1) {
-                    index++;
-                } else if(amount == -1) {
-                    index--;
+                if (amount > 0) {
+                    if(index < pokemonPanels.size() - 1) {
+                        index++;
+                    }
+                } else {
+                    if(index > 0) {
+                        index--;
+                    }
                 }
 
-                pokemonPanels.get(index).getPokemonPanel().setBackground(Color.red);
-                System.out.println(index);
+                for(PokemonPanel panel : pokemonPanels) {
+                    if(panel.getPokemonPanel().equals(pokemonPanels.get(index).getPokemonPanel())) {
+                        panel.getPokemonPanel().setBackground(Color.red);
+                    } else {
+                        panel.getPokemonPanel().setBackground(Color.black);
+                    }
+                }
 
+                System.out.println(amount);
             }
         });
 
@@ -131,7 +142,7 @@ public class PokedexGUI extends JFrame{
 
         public void initializePokemonPanel() {
             getPokemonPanel().setSize(600, 80);
-            getPokemonPanel().setBackground(Color.black);
+            getPokemonPanel().setBackground(black);
         }
 
         @Override
