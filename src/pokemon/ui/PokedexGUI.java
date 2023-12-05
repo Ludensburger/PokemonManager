@@ -1,226 +1,143 @@
 package pokemon.ui;
 
-import pokemon.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.stream.Location;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
 
-public class PokedexGUI extends JFrame {
-    private JPanel pnlPokedex;
-    private JPanel pnlSearch;
-    private JTextField txtSearch;
-    private JButton btnSearch;
-    private JPanel pnlMain;
-    private JPanel pnlPokemon1;
-    private JPanel pnlPokemon3;
-    private JPanel pnlPokemon2;
-    private JPanel pnlPokemon4;
-    private JPanel pnlPokemon5;
-    private JPanel pnlPokemon6;
-    private JButton backButton;
-    private JButton nextButton;
-    private JLabel lblName1;
-    private JLabel lblName2;
-    private JLabel lblName3;
-    private JLabel lblName4;
-    private JLabel lblName5;
-    private JLabel lblName6;
-    private JLabel lblNum1;
-    private JLabel lblNum2;
-    private JLabel lblNum3;
-    private JLabel lblNum4;
-    private JLabel lblNum5;
-    private JLabel lblNum6;
-    private JLabel lblImage1;
-    private JLabel lblType1;
-    private JLabel lblType2;
-    private JLabel lblImage3;
-    private JLabel lblImage2;
-    private JLabel lblImage4;
-    private JLabel lblType4;
-    private JLabel lblImage5;
-    private JLabel lblType5;
-    private JLabel lblImage6;
-    private JLabel lblType6;
-    private JLabel lblType3;
+public class PokedexGUI extends JFrame{
 
-    Pokedex pokedex;
-
-    {
-        pokedex = new Pokedex();
-        try {
-            pokedex.startPokedex();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    ArrayList<Pokemon> PokemonObjects = pokedex.getPokemonArrayList();
-    private int PAGE;
-
-    public int getPAGE() {
-        return PAGE;
-    }
-
-    public void setPAGE(int PAGE) {
-        if(PAGE < 0 || PAGE > PokemonObjects.size()) {
-            return;
-        }
-        this.PAGE = PAGE;
-    }
-
-    public static void main(String[] args){
-        PokedexGUI app = new PokedexGUI();
+    PokedexGUI() throws CloneNotSupportedException {
         ImageIcon icon = new ImageIcon("src" + File.separator + "ico.png");
 
-        app.setContentPane(app.pnlPokedex);
-        app.setSize(800, 600);
-        app.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        app.setTitle("Pokedex");
-        app.setIconImage(icon.getImage());
-        app.setVisible(true);
-        app.setResizable(false);
-    }
-    public PokedexGUI(){
-        List<JLabel> LabelNames = new ArrayList<>();
-        List<JLabel> LabelNumbers = new ArrayList<>();
-        List<JLabel> LabelImages = new ArrayList<>();
-        List<JLabel> LabelTypes = new ArrayList<>();
-        List<JPanel> PanelPokemons = new ArrayList<>();
+        this.setTitle("Pokedex");
+        this.setIconImage(icon.getImage());
+        this.setLayout(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(1280, 720);
+        this.setVisible(true);
 
-        initializeComponents(LabelNames, LabelImages, LabelNumbers, LabelTypes, PanelPokemons);
-        initializePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
+        ArrayList<PokemonPanel> pokemonPanels = getPokemonPanels();
 
-        txtSearch.addKeyListener(new KeyAdapter() {
+        Point loc = new Point(600, 100);
+        for(PokemonPanel panel : pokemonPanels) {
+            panel.getPokemonPanel().setLocation(loc);
+            this.add(panel.getPokemonPanel());
+            loc.y += 90;
+        }
+
+        PokemonPanel currentPanel = new PokemonPanel();
+        currentPanel.getPokemonPanel().setBackground(Color.red);
+
+        addMouseWheelListener(new MouseWheelListener() {
             @Override
-            public void keyReleased(KeyEvent e) {
-                updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-                super.keyReleased(e);
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int amount = (e.getWheelRotation());
+                int index = pokemonPanels.size() / 2;
+
+                if(amount == 1) {
+                    index++;
+                } else if(amount == -1) {
+                    index--;
+                }
+
+                pokemonPanels.get(index).getPokemonPanel().setBackground(Color.red);
+                System.out.println(index);
+
             }
         });
 
-        nextButton.addActionListener(e -> {
-            setPAGE(getPAGE() + 1);
-            updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-        });
-
-        backButton.addActionListener(e -> {
-            setPAGE(getPAGE() - 1);
-            updateActivePokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes);
-        });
-        pnlPokemon1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                pnlPokemon1.setBackground(Color.red);
-                super.mousePressed(e);
-            }
-        });
-        pnlPokemon1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                pnlPokemon1.setBackground(Color.black);
-                super.mouseReleased(e);
-            }
-        });
     }
 
-    public void updateActivePokemonToPanels(
-            List<Pokemon> PokemonObjects,
-            List<JLabel> LabelNames,
-            List<JLabel> LabelImages,
-            List<JLabel> LabelNumbers,
-            List<JLabel> LabelTypes) {
+    private static ArrayList<PokemonPanel> getPokemonPanels() throws CloneNotSupportedException {
+        ArrayList<PokemonPanel> pokemonPanels = new ArrayList<>();
 
-        String activeSearch = txtSearch.getText().toUpperCase();
+        PokemonPanel pokemonPanel = new PokemonPanel();
 
-        List<Pokemon> PokemonActiveSearch =  new ArrayList<>();
-        for(Pokemon pokemon : PokemonObjects) {
-            if(pokemon.getName().contains(activeSearch)) {
-                PokemonActiveSearch.add(pokemon);
-            }
+        PokemonPanel pokemonPanel1 = pokemonPanel.clone();
+        PokemonPanel pokemonPanel2 = pokemonPanel.clone();
+        PokemonPanel pokemonPanel3 = pokemonPanel.clone();
+        PokemonPanel pokemonPanel4 = pokemonPanel.clone();
+        PokemonPanel pokemonPanel5 = pokemonPanel.clone();
+
+        pokemonPanels.add(pokemonPanel1);
+        pokemonPanels.add(pokemonPanel2);
+        pokemonPanels.add(pokemonPanel3);
+        pokemonPanels.add(pokemonPanel4);
+        pokemonPanels.add(pokemonPanel5);
+        return pokemonPanels;
+    }
+
+    public static class PokemonPanel implements Cloneable {
+        private final JPanel pokemonPanel;
+        private final JLabel pokemonId;
+        private final JLabel pokemonName;
+        private final JLabel pokemonImage;
+        private final JLabel pokemonType;
+
+        public PokemonPanel() {
+            this.pokemonPanel = new JPanel();
+            this.pokemonId = new JLabel();
+            this.pokemonName = new JLabel();
+            this.pokemonImage = new JLabel();
+            this.pokemonType = new JLabel();
+
+            pokemonPanel.add(pokemonId);
+            pokemonPanel.add(pokemonName);
+            pokemonPanel.add(pokemonImage);
+            pokemonPanel.add(pokemonType);
+
+            initializePokemonPanel();
         }
 
-        int PokemonActiveSearchIndexCount = getPAGE() * 6;
-        for(int i = 0; i < 6; i++) {
-            displayPokemonToPanels(PokemonActiveSearch, LabelNames, LabelImages, LabelNumbers, LabelTypes, PokemonActiveSearchIndexCount,  i, PokemonActiveSearchIndexCount++ < PokemonActiveSearch.size());
+        public JPanel getPokemonPanel() {
+            return pokemonPanel;
         }
 
-    }
+        public JLabel getPokemonId() {
+            return pokemonId;
+        }
 
-    public void initializePokemonToPanels(
-            List<Pokemon> PokemonObjects,
-            List<JLabel> LabelNames,
-            List<JLabel> LabelImages,
-            List<JLabel> LabelNumbers,
-            List<JLabel> LabelTypes) {
+        public JLabel getPokemonName() {
+            return pokemonName;
+        }
 
-        for (int i = 0; i < 6; i++) {
-            displayPokemonToPanels(PokemonObjects, LabelNames, LabelImages, LabelNumbers, LabelTypes, i,  i, i <  PokemonObjects.size());
+        public JLabel getPokemonImage() {
+            return pokemonImage;
+        }
+
+        public JLabel getPokemonType() {
+            return pokemonType;
+        }
+
+        public void setPokemonId(String pokemonId) {
+            this.pokemonId.setText(pokemonId);
+        }
+
+        public void setPokemonName(String pokemonName) {
+            this.pokemonName.setText(pokemonName);
+        }
+
+        public void setPokemonImage(ImageIcon image) {
+            this.pokemonImage.setIcon(image);
+        }
+
+        public void setPokemonType(String pokemonType) {
+            this.pokemonType.setText(pokemonType);
+        }
+
+        public void initializePokemonPanel() {
+            getPokemonPanel().setSize(600, 80);
+            getPokemonPanel().setBackground(Color.black);
+        }
+
+        @Override
+        public PokemonPanel clone() throws CloneNotSupportedException {
+            PokemonPanel clone = (PokemonPanel) super.clone();
+            return new PokemonPanel();
         }
     }
-
-    public void displayPokemonToPanels(
-            List<Pokemon> PokemonObjects,
-            List<JLabel> LabelNames,
-            List<JLabel> LabelImages,
-            List<JLabel> LabelNumbers,
-            List<JLabel> LabelTypes,
-            int PokemonIndex,
-            int PanelIndex,
-            Boolean isPokemon) {
-
-        if(isPokemon) {
-            String name = PokemonObjects.get(PokemonIndex).getName();
-            String idNumber = "#" + String.format("%03d", PokemonObjects.get(PokemonIndex).getId());
-            String type = PokemonObjects.get(PokemonIndex).getType();
-            String imagePath = "src" + File.separator + "img" + File.separator + "pokemons" + File.separator + idNumber.substring(1) + ".png";
-            ImageIcon icon;
-
-            try {
-                BufferedImage img = null;
-                Image rawImg = ImageIO.read(new File(imagePath));
-                Image scaledImg = rawImg.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
-                icon = new ImageIcon(scaledImg);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            LabelNames.get(PanelIndex).setText(name);
-            LabelNumbers.get(PanelIndex).setText(idNumber);
-            LabelTypes.get(PanelIndex).setText(type);
-            LabelImages.get(PanelIndex).setText("");
-            LabelImages.get(PanelIndex).setIcon(icon);
-        } else {
-            LabelNames.get(PanelIndex).setText("???");
-            LabelNumbers.get(PanelIndex).setText("???");
-            LabelTypes.get(PanelIndex).setText("???");
-            LabelImages.get(PanelIndex).setIcon(null);
-            LabelImages.get(PanelIndex).setText("???");
-        }
-    }
-
-    public void initializeComponents(
-            List<JLabel> LabelNames,
-            List<JLabel> LabelImages,
-            List<JLabel> LabelNumbers,
-            List<JLabel> LabelTypes,
-            List<JPanel> PanelPokemons) {
-
-        //////////////////////// Adding to arrays
-        Collections.addAll(LabelNames, lblName1, lblName2, lblName3, lblName4, lblName5, lblName6);
-        Collections.addAll(LabelNumbers, lblNum1, lblNum2, lblNum3, lblNum4, lblNum5, lblNum6);
-        Collections.addAll(LabelImages, lblImage1, lblImage2, lblImage3, lblImage4, lblImage5, lblImage6);
-        Collections.addAll(LabelTypes, lblType1, lblType2, lblType3, lblType4, lblType5, lblType6);
-        Collections.addAll(PanelPokemons, pnlPokemon1, pnlPokemon2, pnlPokemon3, pnlPokemon4, pnlPokemon5, pnlPokemon6);
-        /////////////////////////
-    }
-
 }
-

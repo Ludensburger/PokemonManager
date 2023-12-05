@@ -1,7 +1,7 @@
 package pokemon.util;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import pokemon.Pokemon;
 
 public class PokeFile {
@@ -9,7 +9,7 @@ public class PokeFile {
     private static File createFile() {
         String WORKING_DIR = System.getProperty("user.dir");
         String FOLDER_PATH = WORKING_DIR + File.separator + "src" + File.separator + "dat" + File.separator;
-        String FILE_NAME = "pokemon_data.txt";
+        String FILE_NAME = "pokedex_data.txt";
         String FILE_PATH = FOLDER_PATH + FILE_NAME;
 
         return new File(FILE_PATH);
@@ -20,85 +20,58 @@ public class PokeFile {
         }
         return pokeFile;
     }
-
-    public static void writePokeFile(ArrayList<Pokemon> pokemonArrayList) throws FileNotFoundException {
+    public static void writePokeFile(HashMap<Integer, Pokemon> PokemonHashMap) throws IOException {
         File file = getPokeFile();
-        FileWriter fw;
-        BufferedWriter bw;
+        FileOutputStream fos;
+        ObjectOutputStream oos;
 
         try {
-            fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
+            fos = new FileOutputStream(file);
+            oos = new ObjectOutputStream(fos);
 
-            for(Pokemon pokemon : pokemonArrayList) {
-                String parsePokemonObjectToString =
-                        "\nid:" + pokemon.getId() +
-                        "\nname:" + pokemon.getName() +
-                        "\ntype:" + pokemon.getType() +
-                        "\ndesc:" + pokemon.getDescription();
-
-                bw.write(parsePokemonObjectToString);
+            for(Pokemon pokemon : PokemonHashMap.values()) {
+                oos.writeObject(pokemon);
                 System.out.println(pokemon.getName() + " has been registered!");
             }
-            bw.flush();
-            bw.close();
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException();
+            oos.flush();
+            oos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public static ArrayList<Pokemon> readPokeFile() throws FileNotFoundException {
+    public static HashMap<Integer, Pokemon> readPokeFile() throws IOException, ClassNotFoundException {
         File file = getPokeFile();
-        FileReader fr;
-        BufferedReader br;
-        String NAME = null, TYPE = null, DESC = null, ID = null;
-        String CURRENT_LINE;
-        boolean isNewPokemon = false;
-        ArrayList<Pokemon> POKEMON_DATA = new ArrayList<>();
+        FileInputStream fis;
+        ObjectInputStream ois;
+
+        HashMap<Integer, Pokemon> POKEMON_DATA = new HashMap<>();
+
+        //Check for empty file
+        if(file.length() == 0) {
+            System.out.println("PokeFile is empty.");
+            return POKEMON_DATA;
+        }
 
         try {
-            fr  = new FileReader(file);
-            br = new BufferedReader(fr);
-
-            while((CURRENT_LINE = br.readLine()) != null) {
-
-                if(CURRENT_LINE.contains("id:")) {
-                    ID = CURRENT_LINE.substring(3).trim();
-                }
-                if(CURRENT_LINE.contains("name:")) {
-                    NAME = CURRENT_LINE.substring(5).trim();
-                }
-                if(CURRENT_LINE.contains("type:")) {
-                    TYPE = CURRENT_LINE.substring(5).trim();
-                }
-                if(CURRENT_LINE.contains("desc:")) {
-                    DESC = CURRENT_LINE.substring(5).trim();
-                }
-
-                if(DESC != null && ID != null) {
-                    int ID_INT = Integer.parseInt(ID);
-                    Pokemon pokemon = new Pokemon.PokemonBuilder(NAME, ID_INT, DESC, TYPE).build();
-                    POKEMON_DATA.add(pokemon);
-                    isNewPokemon = true;
-                }
-
-                if(isNewPokemon) {
-                    ID = null;
-                    NAME = null;
-                    TYPE = null;
-                    DESC = null;
-                    isNewPokemon = false;
+            fis = new FileInputStream(file);
+            ois = new ObjectInputStream(fis);
+            while (true) {
+                try {
+                    Pokemon pokemon = (Pokemon) ois.readObject();
+                    POKEMON_DATA.put(pokemon.getId(), pokemon);
+                } catch (EOFException e) {
+                    //breaks loop when EOF has been reached
+                    break;
                 }
             }
-            br.close();
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException();
+            ois.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException("Error reading PokeFile: ", e);
         }
+
+        System.out.println("Pokedex loaded successfully!");
         return POKEMON_DATA;
     }
 }

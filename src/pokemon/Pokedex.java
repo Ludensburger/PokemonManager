@@ -1,47 +1,36 @@
 package pokemon;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.HashMap;
 import pokemon.util.PokeFile;
 
 public class Pokedex {
-    private ArrayList<Pokemon> pokemonArrayList;
+    private HashMap<Integer, Pokemon> PokemonHashMap = new HashMap<>();
 
-    public ArrayList<Pokemon> getPokemonArrayList() {
-        return pokemonArrayList;
+    public HashMap<Integer, Pokemon> getPokemonHashMap() {
+        return PokemonHashMap;
     }
-    public void setPokemonArrayList(ArrayList<Pokemon> pokemonArrayList) {
-        this.pokemonArrayList = pokemonArrayList;
+    public void setPokemonHashMap(HashMap<Integer, Pokemon> PokemonHashMap) {
+        this.PokemonHashMap = PokemonHashMap;
     }
 
-    public void startPokedex() throws FileNotFoundException {
-        setPokemonArrayList(PokeFile.readPokeFile());
+    public void startPokedex() throws IOException, ClassNotFoundException {
+        setPokemonHashMap(PokeFile.readPokeFile());
     }
 
     public void addPokemon(Pokemon pokemon) {
-        getPokemonArrayList().add(pokemon);
+        getPokemonHashMap().put(pokemon.getId(), pokemon);
     }
 
-    public void removePokemon(Pokemon pokemon) {
-        getPokemonArrayList().remove(pokemon);
+    public void removePokemon(Integer id) {
+        getPokemonHashMap().remove(id);
     }
 
-    public Pokemon selectPokemon(int id) {
-        for(Pokemon pokemon : getPokemonArrayList()) {
-            if(id == pokemon.getId()) {
-                return pokemon;
-            }
-        }
-        return null;
+    public Pokemon selectPokemon(Integer id) {
+        return getPokemonHashMap().getOrDefault(id, null);
     }
 
-    public Pokemon selectPokemon(String name) {
-        for(Pokemon pokemon : getPokemonArrayList()) {
-            if(Objects.equals(name, pokemon.getName())) {
-                return pokemon;
-            }
-        }
-        return null;
+    public void updatePokemon(Integer id, Pokemon modifiedPokemon) {
+        getPokemonHashMap().put(id, modifiedPokemon);
     }
 }

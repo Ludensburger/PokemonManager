@@ -1,20 +1,12 @@
 package pokemon;
 
-/**
- *  pokemon.Pokemon class containing the following characteristics:
- *           name           (Pokemon's name)
- *           id             (Pokemon's identification number)
- *           type           (Pokemon's type, i.e 'FIRE' if single-type
- *                          and 'FIRE/FIGHTING' if dual-type)
- *           description    (Pokemon's description, to be input by user)
- *
- *
- */
+import java.io.Serializable;
 
-public class Pokemon {
+public class Pokemon implements Serializable {
     private final String name;
-    private int id;
-    private final String type;
+    private final int id;
+    private final PokemonType primaryType;
+    private final PokemonType secondaryType;
     private final String description;
 
     public String getName() {
@@ -25,12 +17,12 @@ public class Pokemon {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public PokemonType getPrimaryType() {
+        return primaryType;
     }
 
-    public String getType() {
-        return type;
+    public PokemonType getSecondaryType() {
+        return secondaryType;
     }
 
     public String getDescription() {
@@ -40,21 +32,41 @@ public class Pokemon {
     private Pokemon(PokemonBuilder builder) {
         this.name = builder.name;
         this.id = builder.id;
-        this.type = builder.type;
+        this.primaryType = builder.primaryType;
+        this.secondaryType = builder.secondaryType;
         this.description = builder.description;
     }
 
-    public static class PokemonBuilder{
+    public static class PokemonBuilder {
         private final String name;
         private final int id;
-        private final String type;
-        private final String description;
+        private PokemonType primaryType;
+        private PokemonType secondaryType;
+        private String description;
 
-        public PokemonBuilder(String name, int id, String description, String type) {
+        public PokemonBuilder(String name, int id) {
             this.name = name;
             this.id = id;
+        }
+
+        public PokemonBuilder(Pokemon pokemon) {
+            this.name = pokemon.name;
+            this.id = pokemon.id;
+        }
+
+        public PokemonBuilder setPrimaryType(PokemonType primaryType) {
+            this.primaryType = primaryType;
+            return this;
+        }
+
+        public PokemonBuilder setSecondaryType(PokemonType secondaryType) {
+            this.secondaryType = secondaryType;
+            return this;
+        }
+
+        public PokemonBuilder setDescription(String description) {
             this.description = description;
-            this.type = type;
+            return this;
         }
 
         public Pokemon build() {
