@@ -6,6 +6,12 @@ import pokemon.Pokemon;
 
 public class PokeFile {
     private static File pokeFile;
+
+    /**
+     *
+     * @return
+     * locates "pokedex_data.txt" file which is where all Pokemon data are stored as bytes
+     */
     private static File createFile() {
         String WORKING_DIR = System.getProperty("user.dir");
         String FOLDER_PATH = WORKING_DIR + File.separator + "src" + File.separator + "dat" + File.separator;
@@ -20,6 +26,13 @@ public class PokeFile {
         }
         return pokeFile;
     }
+
+    /**
+     *
+     * @param PokemonHashMap
+     *          Retrieves current running hashmap from Pokedex for file writing
+     * @throws IOException
+     */
     public static void writePokeFile(HashMap<Integer, Pokemon> PokemonHashMap) throws IOException {
         File file = getPokeFile();
         FileOutputStream fos;
@@ -29,7 +42,9 @@ public class PokeFile {
             fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
 
+            // Iterates through all existing hashmap values
             for(Pokemon pokemon : PokemonHashMap.values()) {
+                // Converts all Pokemon objects into bytes and writes each into "pokemon_data.txt"
                 oos.writeObject(pokemon);
                 System.out.println(pokemon.getName() + " has been registered!");
             }
@@ -48,9 +63,10 @@ public class PokeFile {
 
         HashMap<Integer, Pokemon> POKEMON_DATA = new HashMap<>();
 
-        //Check for empty file
+        // Checks for empty file
         if(file.length() == 0) {
             System.out.println("PokeFile is empty.");
+            //returns empty hashmap if file is empty
             return POKEMON_DATA;
         }
 
@@ -59,10 +75,12 @@ public class PokeFile {
             ois = new ObjectInputStream(fis);
             while (true) {
                 try {
+                    // Reads through bytes in file and converts them into Pokemon objects
                     Pokemon pokemon = (Pokemon) ois.readObject();
+                    // Adds each Pokemon object into hashmap
                     POKEMON_DATA.put(pokemon.getId(), pokemon);
                 } catch (EOFException e) {
-                    //breaks loop when EOF has been reached
+                     // Stops file reader when end-of-file is reached
                     break;
                 }
             }

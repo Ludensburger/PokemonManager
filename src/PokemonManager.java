@@ -1,12 +1,14 @@
 import pokemon.Pokedex;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 import pokemon.*;
 import pokemon.util.PokeFile;
 
+/*
+ * To be fully refactored once GUI is complete.
+ */
 public class PokemonManager {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("Current Working Directory: " + System.getProperty("user.dir"));

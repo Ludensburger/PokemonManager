@@ -2,7 +2,7 @@ package pokemon;
 
 import java.util.Scanner;
 /**
- *  All pokemon types in the Pokemon franchise as of November 29, 2023.
+ *  All Pokemon types in the Pokemon franchise as of November 29, 2023.
  *  There are currently 18 types.
  */
 public enum PokemonType {
@@ -25,6 +25,10 @@ public enum PokemonType {
     STEEL,
     FAIRY;
 
+    /**
+     * To be removed once GUI has "Add Pokemon" implemented.
+     * @return
+     */
     public static PokemonType pickType() {
         Scanner scanner = new Scanner(System.in);
         int type_no = 0;

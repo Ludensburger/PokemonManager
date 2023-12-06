@@ -10,6 +10,7 @@ public class Pokedex {
     public HashMap<Integer, Pokemon> getPokemonHashMap() {
         return PokemonHashMap;
     }
+
     public void setPokemonHashMap(HashMap<Integer, Pokemon> PokemonHashMap) {
         this.PokemonHashMap = PokemonHashMap;
     }
@@ -27,6 +28,7 @@ public class Pokedex {
     }
 
     public Pokemon selectPokemon(Integer id) {
+        // Uses ID to return Pokemon object from hashmap and returns null if ID not found
         return getPokemonHashMap().getOrDefault(id, null);
     }
 
