@@ -34,22 +34,22 @@ public class PokeFile {
      * @throws IOException
      */
     public static void writePokeFile(HashMap<Integer, Pokemon> PokemonHashMap) throws IOException {
-        File file = getPokeFile();
-        FileOutputStream fos;
-        ObjectOutputStream oos;
+        File FILE = getPokeFile();
+        FileOutputStream FOS;
+        ObjectOutputStream OOS;
 
         try {
-            fos = new FileOutputStream(file);
-            oos = new ObjectOutputStream(fos);
+            FOS = new FileOutputStream(FILE);
+            OOS = new ObjectOutputStream(FOS);
 
             // Iterates through all existing hashmap values
             for(Pokemon pokemon : PokemonHashMap.values()) {
                 // Converts all Pokemon objects into bytes and writes each into "pokemon_data.txt"
-                oos.writeObject(pokemon);
+                OOS.writeObject(pokemon);
                 System.out.println(pokemon.getName() + " has been registered!");
             }
-            oos.flush();
-            oos.close();
+            OOS.flush();
+            OOS.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,26 +57,26 @@ public class PokeFile {
 
 
     public static HashMap<Integer, Pokemon> readPokeFile() throws IOException, ClassNotFoundException {
-        File file = getPokeFile();
-        FileInputStream fis;
-        ObjectInputStream ois;
+        File FILE = getPokeFile();
+        FileInputStream FIS;
+        ObjectInputStream OIS;
 
         HashMap<Integer, Pokemon> POKEMON_DATA = new HashMap<>();
 
         // Checks for empty file
-        if(file.length() == 0) {
+        if(FILE.length() == 0) {
             System.out.println("PokeFile is empty.");
             //returns empty hashmap if file is empty
             return POKEMON_DATA;
         }
 
         try {
-            fis = new FileInputStream(file);
-            ois = new ObjectInputStream(fis);
+            FIS = new FileInputStream(FILE);
+            OIS = new ObjectInputStream(FIS);
             while (true) {
                 try {
                     // Reads through bytes in file and converts them into Pokemon objects
-                    Pokemon pokemon = (Pokemon) ois.readObject();
+                    Pokemon pokemon = (Pokemon) OIS.readObject();
                     // Adds each Pokemon object into hashmap
                     POKEMON_DATA.put(pokemon.getId(), pokemon);
                 } catch (EOFException e) {
@@ -84,7 +84,7 @@ public class PokeFile {
                     break;
                 }
             }
-            ois.close();
+            OIS.close();
         } catch (IOException e) {
             throw new IOException("Error reading PokeFile: ", e);
         }

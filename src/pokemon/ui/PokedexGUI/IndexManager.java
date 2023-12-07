@@ -19,10 +19,6 @@ public class IndexManager {
         return panelIndex;
     }
 
-    public void setPanelIndex(Integer index) {
-        IndexManager.panelIndex = index;
-    }
-
     public void incrementPanel() {
         panelIndex++;
     }
@@ -34,11 +30,6 @@ public class IndexManager {
     public Integer getPokemonIndex() {
         return pokemonIndex;
     }
-
-    public void setPokemonIndex(Integer pokemonIndex) {
-        IndexManager.pokemonIndex = pokemonIndex;
-    }
-
     public void incrementPokemon() {
         pokemonIndex++;
     }
@@ -49,10 +40,6 @@ public class IndexManager {
 
     public Integer getStartIndex() {
         return startIndex;
-    }
-
-    public void setStartIndex(Integer startIndex) {
-        IndexManager.startIndex = startIndex;
     }
 
     public void incrementStart() {

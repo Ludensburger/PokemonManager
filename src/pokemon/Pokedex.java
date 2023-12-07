@@ -16,6 +16,10 @@ public class Pokedex {
     }
 
     public void startPokedex() throws IOException, ClassNotFoundException {
+        /*
+         *  Runs readPokeFile function and retrieves data from "pokedex_data.txt"
+         *  Does not read instantly in case user wants empty Pokedex
+         */
         setPokemonHashMap(PokeFile.readPokeFile());
     }
 
