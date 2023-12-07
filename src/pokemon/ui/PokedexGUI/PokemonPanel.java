@@ -14,6 +14,10 @@ import java.io.InputStream;
 
 public class PokemonPanel implements Cloneable {
     private final JPanel pokemonPanel;
+
+    private final JPanel components;
+
+    private final JLabel backgroundImage;
     private final JLabel pokemonId;
     private final JLabel pokemonName;
     private final JLabel pokemonImage;
@@ -24,10 +28,8 @@ public class PokemonPanel implements Cloneable {
         this.pokemonId = new JLabel();
         this.pokemonName = new JLabel();
         this.pokemonImage = new JLabel();
-
-        pokemonPanel.add(pokemonImage);
-        pokemonPanel.add(pokemonId);
-        pokemonPanel.add(pokemonName);
+        this.components = new JPanel();
+        this.backgroundImage = new JLabel();
 
         initializePokemonPanel();
     }
@@ -40,8 +42,15 @@ public class PokemonPanel implements Cloneable {
         getPokemonId().setFont(PokemonRB);
         getPokemonName().setFont(PokemonRB);
 
-        getPokemonName().setBorder(new EmptyBorder(10, 5, 10, 5));
-        getPokemonId().setBorder(new EmptyBorder(10, 5, 10, 5));
+        getComponents().setPreferredSize(new Dimension(400, 105));
+        getComponents().setLayout(new BorderLayout());
+        getPokemonPanel().add(getBackgroundImage());
+        getPokemonPanel().add(getComponents());
+
+        getComponents().setBackground(Color.black);
+        getComponents().add(getPokemonImage(), BorderLayout.WEST);
+        getComponents().add(getPokemonId(), BorderLayout.CENTER);
+        getComponents().add(getPokemonName(), BorderLayout.EAST);
     }
 
     public JPanel getPokemonPanel() {
@@ -60,6 +69,9 @@ public class PokemonPanel implements Cloneable {
         return pokemonImage;
     }
 
+    public JPanel getComponents() { return components; }
+
+    public JLabel getBackgroundImage() { return backgroundImage; }
 
     public void setPokemonId(Integer pokemonId) {
         this.getPokemonId().setText(String.format("%03d", pokemonId));
@@ -77,7 +89,7 @@ public class PokemonPanel implements Cloneable {
         try {
             BufferedImage img = null;
             Image rawImg = ImageIO.read(new File(ImagePath));
-            Image scaledImg = rawImg.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
+            Image scaledImg = rawImg.getScaledInstance(86, 86, Image.SCALE_SMOOTH);
             icon = new ImageIcon(scaledImg);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -128,7 +140,6 @@ class EnlargedPokemonPanel extends PokemonPanel {
 
     @Override
     public void initializePokemonPanel() throws IOException, FontFormatException {
-        Font PokemonRB = new FontHandler().getFont("PokemonRB.ttf");
         String FolderPath = "src" + File.separator + "img" + File.separator + "pokedex" + File.separator;
         String ImagePath = FolderPath + "test-bg.jpg";
         ImageIcon icon;
@@ -141,10 +152,22 @@ class EnlargedPokemonPanel extends PokemonPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        getPokemonPanel().setPreferredSize(new Dimension(450, 450));
+        Font PokemonRB = new FontHandler().getFont("PokemonRB.ttf");
+        getPokemonPanel().setBackground(Color.black);
+        getPokemonPanel().setPreferredSize(new Dimension(560, 560));
 
         getPokemonId().setFont(PokemonRB);
         getPokemonName().setFont(PokemonRB);
+
+        getComponents().setPreferredSize(new Dimension(560, 560));
+        getComponents().setLayout(new BorderLayout());
+        getPokemonPanel().add(getBackgroundImage());
+        getPokemonPanel().add(getComponents());
+
+        getComponents().setBackground(Color.black);
+        getComponents().add(getPokemonImage(), BorderLayout.CENTER);
+        getComponents().add(getPokemonId(), BorderLayout.NORTH);
+        getComponents().add(getPokemonName(), BorderLayout.SOUTH);
     }
 
 }

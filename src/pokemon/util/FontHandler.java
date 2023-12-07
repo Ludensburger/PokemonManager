@@ -15,7 +15,7 @@ public class FontHandler {
         try {
             InputStream is = getClass().getResourceAsStream("/pokemon/util/font/pokemonRedBlue.ttf");
             if(is != null) {
-                font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(30f);
+                font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(16f);
             }
         } catch (FontFormatException e) {
             throw new FontFormatException("Trouble dealing with font!");

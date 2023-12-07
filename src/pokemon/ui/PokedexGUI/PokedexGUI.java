@@ -23,6 +23,9 @@ public class PokedexGUI extends JFrame {
     private final SearchBar searchBar = new SearchBar();
     private final PokemonPanel enlargedPanel = new EnlargedPokemonPanel();
     private final JPanel pokemonPanelsContainer = new JPanel();
+    private final JPanel header = new JPanel();
+
+    private final JButton addPokemon = new JButton();
 
     public PokedexGUI() throws CloneNotSupportedException, IOException, FontFormatException, ClassNotFoundException {
         /**
@@ -71,14 +74,23 @@ public class PokedexGUI extends JFrame {
         return pokemonPanelsContainer;
     }
 
+    public JPanel getHeader() { return header; }
+
+    public JButton getAddPokemon() { return addPokemon;}
+
 
 
     private void load() throws CloneNotSupportedException {
         JTextField searchField = getSearchBar().getSearchField();
-        getPokemonPanelsContainer().setLayout(new GridLayout(5,1,1,1));
+        getPokemonPanelsContainer().setLayout(new GridLayout(5,1));
+        getPokemonPanelsContainer().setBackground(Color.black);
 
-        super.add(searchField, BorderLayout.NORTH);
-
+        getAddPokemon().setPreferredSize(new Dimension(350, 100));
+        getAddPokemon().setText("Add Pokemon");
+        getHeader().setLayout(new BorderLayout());
+        getHeader().add(searchField, BorderLayout.CENTER);
+        getHeader().add(getAddPokemon(), BorderLayout.EAST);
+        super.add(getHeader(), BorderLayout.NORTH);
         super.add(getEnlargedPanel().getPokemonPanel(), BorderLayout.CENTER);
 
         for(PokemonPanel panel : getPokemonPanels()) {
@@ -92,6 +104,7 @@ public class PokedexGUI extends JFrame {
             When menu loads up, selected Pokemon indicator starts at the very first panel
          */
         getPokemonPanels().get(0).getPokemonPanel().setBackground(Color.red);
+        getPokemonPanels().get(0).getComponents().setBackground(Color.red);
         getEnlargedPanel().setPokemon(getPokedex().selectPokemon(1));
 
         int count = 1;
@@ -216,8 +229,10 @@ public class PokedexGUI extends JFrame {
         for(PokemonPanel panel : getPokemonPanels()) {
             if(panel.getPokemonPanel().equals(getPokemonPanels().get(selectIndex.getPanelIndex()).getPokemonPanel())) {
                 panel.getPokemonPanel().setBackground(Color.red);
+                panel.getComponents().setBackground(Color.red);
             } else {
                 panel.getPokemonPanel().setBackground(Color.black);
+                panel.getComponents().setBackground(Color.black);
             }
 
             getEnlargedPanel().setPokemon(getPokedex().selectPokemon(selectIndex.getPokemonIndex()));
