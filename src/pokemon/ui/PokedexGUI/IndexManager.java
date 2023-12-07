@@ -20,7 +20,10 @@ public class IndexManager {
     }
 
     public void incrementPanel() {
+
         panelIndex++;
+
+
     }
 
     public void decrementPanel() {

@@ -380,6 +380,25 @@ public class PokedexGUI extends JFrame implements MenuDesign {
 
         //  Updates our enlarged panel
         getEnlargedPanel().setPokemon(getPokedex().selectPokemon(selectIndex.getPokemonIndex()));
+
+        AudioInputStream SELECT_SOUND = null;
+        try {
+            SELECT_SOUND = new AudioHandler().getAudio("selectSoundEffect.wav");
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            throw new RuntimeException(ex);
+        }
+        Clip clip = null;
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException ex) {
+            throw new RuntimeException(ex);
+        }
+        try {
+            clip.open(SELECT_SOUND);
+        } catch (LineUnavailableException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        clip.start();
     }
 
     private ArrayList<PokemonPanel> getPanels() throws CloneNotSupportedException, IOException, FontFormatException {
