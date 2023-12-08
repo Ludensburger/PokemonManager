@@ -3,11 +3,13 @@ package pokemon.ui.PokedexGUI.components;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
 public class EnlargedPokemonPanel extends PokemonPanel {
+
     public EnlargedPokemonPanel() throws CloneNotSupportedException, IOException, FontFormatException {
         super.clone();
     }
@@ -37,7 +39,7 @@ public class EnlargedPokemonPanel extends PokemonPanel {
         //  Setting components container
         getComponents().setPreferredSize(ComponentsContainer_SIZE_ENLARGED());
         getComponents().setLayout(new BorderLayout());
-        getComponents().setOpaque(false);
+        getComponents().setOpaque(true);
 
         //  Adds background and components to Pokemon panel
         getPokemonPanel().add(getBackground());

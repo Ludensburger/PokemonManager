@@ -3,11 +3,9 @@ package pokemon.ui.PokedexGUI;
 
 import pokemon.Pokedex;
 import pokemon.Pokemon;
-import pokemon.ui.PokedexGUI.components.AddPokemonButton;
-import pokemon.ui.PokedexGUI.components.EnlargedPokemonPanel;
-import pokemon.ui.PokedexGUI.components.PokemonPanel;
-import pokemon.ui.PokedexGUI.components.SearchBar;
+import pokemon.ui.PokedexGUI.components.*;
 import pokemon.ui.PokedexGUI.design.MenuDesign;
+import pokemon.ui.viewPokemonGUI.viewPokemonGUI;
 import pokemon.util.AudioHandler;
 import pokemon.util.ImageHandler;
 
@@ -18,7 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.File;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -29,22 +27,32 @@ public class PokedexGUI extends JFrame implements MenuDesign {
     private JLabel labelBackground;
     private JPanel pokemonPanelsContainer;
     private JPanel headerContainer;
+    private JPanel titlePanel;
     private JButton addPokemonButton;
     private ArrayList<PokemonPanel> pokemonPanels;
     private SearchBar searchBar;
     private PokemonPanel enlargedPanel;
+    private Pokemon selectedPokemon;
+
+    private Clip mainMenuMusic;
+
+    private JFrame mainMenu;
+
 
     public PokedexGUI() throws CloneNotSupportedException, IOException, FontFormatException, ClassNotFoundException, UnsupportedAudioFileException, LineUnavailableException {
         //  Handles JFrame settings
-        //  Audio
+        //  Sets background music
         AudioInputStream BACKGROUND_MUSIC = new AudioHandler().getAudio("rustboro.wav");
         Clip clip = AudioSystem.getClip();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.open(BACKGROUND_MUSIC);
         clip.start();
         
         //  Gets Icon
-        ImageIcon ICON = new ImageIcon("src" + File.separator + "ico.png");  // retrieves icon
-        ImageIcon BACKGROUND = new ImageHandler().getPokedexImage("test.gif");
+        ImageIcon ICON = new ImageHandler().getScaledPokedexIcon(64, 64, "icon","ico.png");
+
+        //  Sets background image
+        ImageIcon BACKGROUND = new ImageHandler().getPokedexImage("bg.gif");
         setLabelBackground(new JLabel(BACKGROUND));
 
         //  Starts Pokedex
@@ -56,6 +64,8 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1280, 720);
+        this.setUndecorated(true);
+        this.setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -66,89 +76,25 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         setSelectIndex(IndexManager.getInstance());
         setPokemonPanelsContainer(new JPanel());
         setHeaderContainer(new JPanel());
-        setAddPokemonButton(new AddPokemonButton().getAddPokemonButton());
+        setAddPokemonButton(new AddPokemonButton(this, clip).getAddPokemonButton());
         setPokemonPanels(getPanels());
         setSearchBar(new SearchBar());
         setEnlargedPanel(new EnlargedPokemonPanel());
+        setMainMenuMusic(clip);
+        setMainMenu(this);
 
         //  Loads components
         loadComponents();
     }
 
-    public void setSelectIndex(IndexManager selectIndex) {
-        this.selectIndex = selectIndex;
-    }
-
-    public void setPokemonPanelsContainer(JPanel pokemonPanelsContainer) {
-        this.pokemonPanelsContainer = pokemonPanelsContainer;
-    }
-
-    public void setHeaderContainer(JPanel headerContainer) {
-        this.headerContainer = headerContainer;
-    }
-
-    public void setAddPokemonButton(JButton addPokemonButton) {
-        this.addPokemonButton = addPokemonButton;
-    }
-
-    public void setPokemonPanels(ArrayList<PokemonPanel> pokemonPanels) {
-        this.pokemonPanels = pokemonPanels;
-    }
-
-    public void setSearchBar(SearchBar searchBar) {
-        this.searchBar = searchBar;
-    }
-
-    public void setEnlargedPanel(PokemonPanel enlargedPanel) {
-        this.enlargedPanel = enlargedPanel;
-    }
-
-    public void setPokedex(Pokedex pokedex) {
-        this.pokedex = pokedex;
-    }
-
-    public JLabel getLabelBackground() {
-        return labelBackground;
-    }
-
-    public void setLabelBackground(JLabel background) {
-        this.labelBackground = background;
-    }
-
-    public IndexManager getSelectIndex() {
-        return selectIndex;
-    }
-
-    public ArrayList<PokemonPanel> getPokemonPanels() {
-        return pokemonPanels;
-    }
-
-    public SearchBar getSearchBar() {
-        return searchBar;
-    }
-
-    public PokemonPanel getEnlargedPanel() {
-        return enlargedPanel;
-    }
-
-    public JPanel getPokemonPanelsContainer() {
-        return pokemonPanelsContainer;
-    }
-
-    public JPanel getHeaderContainer() { return headerContainer; }
-
-    public JButton getAddPokemonButton() { return addPokemonButton;}
-    public Pokedex getPokedex() {
-        return pokedex;
-    }
-
-
-    private void loadComponents() throws CloneNotSupportedException {
+    private void loadComponents() throws IOException, FontFormatException {
         //  Gets JTextField from SearchBar
-        JLabel searchFieldBackground = getSearchBar().getIcon();
+        JPanel searchPanel = getSearchBar().getSearchPanel();
         JTextField searchField = getSearchBar().getSearchField();
         getLabelBackground().setLayout(new BorderLayout());
 
+        //  Title Panel
+        setTitlePanel(new TitleBar(this).getTitlePanel());
         //  Sets container to Grid layout and instantiates individual panels
         getPokemonPanelsContainer().setLayout(new GridLayout(5,1));
         getPokemonPanelsContainer().setOpaque(false);
@@ -156,13 +102,10 @@ public class PokedexGUI extends JFrame implements MenuDesign {
             getPokemonPanelsContainer().add(panel.getPokemonPanel());
         }
 
-        //  Sets "Add Pokemon" button
-        getAddPokemonButton().setPreferredSize(AddPokemonButton_SIZE_DEFAULT());
-        getAddPokemonButton().setText("Add Pokemon");
-
         // Sets header container which contains search field and "Add Pokemon" button
         getHeaderContainer().setLayout(new BorderLayout());
-        getHeaderContainer().add(searchFieldBackground, BorderLayout.CENTER);
+        getHeaderContainer().add(getTitlePanel(), BorderLayout.NORTH);
+        getHeaderContainer().add(searchPanel, BorderLayout.CENTER);
         getHeaderContainer().add(getAddPokemonButton(), BorderLayout.EAST);
 
         //  Adds all panels to our JFrame
@@ -189,7 +132,7 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                handleSearchKeyEvent();
+                handleSearchKeyEvent(e);
             }
         });
 
@@ -210,6 +153,7 @@ public class PokedexGUI extends JFrame implements MenuDesign {
             }
         });
     }
+
 
     public void moveDown() {
         /*
@@ -243,7 +187,7 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         //  Checks if current Pokemon index is greater than 1 to prevent going out of bounds
         if(getSelectIndex().getPokemonIndex() > 1) {
             getSelectIndex().decrementPokemon();
-            
+
             //  Checks if the current panel is the first panel
             if(getSelectIndex().getPanelIndex() == 0) {
                 //  Decrements start which handles the index where our Pokemon printing will begin
@@ -251,23 +195,23 @@ public class PokedexGUI extends JFrame implements MenuDesign {
                 getSelectIndex().decrementStart();
             }
         }
-        
+
         //  Checks if our panel does not go out of bounds
         if(getSelectIndex().getPanelIndex() > 0) {
             getSelectIndex().decrementPanel();
         }
     }
 
-    private void handleSearchKeyEvent() {
+    private void handleSearchKeyEvent(KeyEvent e) {
         //  Gets search field
         JTextField searchField = getSearchBar().getSearchField();
-        
+
         //  Gets text from search field
         String SEARCH_FIELD_TEXT = searchField.getText().toUpperCase();
-        
+
         //  Gets current Pokemon selected
         Integer CURRENT_PANEL = IndexManager.getInstance().getPokemonIndex();
-        
+
         //  Initializes the integer that handles the location of where
         //  our Pokemon is found to one (1)
         Integer POKEMON_FOUND_PANEL = getFoundPokemonInteger(SEARCH_FIELD_TEXT);
@@ -296,6 +240,20 @@ public class PokedexGUI extends JFrame implements MenuDesign {
             updatePanels();
         } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
+        }
+
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+            viewPokemonGUI viewPokemonGUI = null;
+            try {
+                viewPokemonGUI = new viewPokemonGUI(getMainMenu(), getMainMenuMusic(), getSelectedPokemon());
+            } catch (IOException | ClassNotFoundException | LineUnavailableException |
+                     UnsupportedAudioFileException | FontFormatException | CloneNotSupportedException ex) {
+                throw new RuntimeException(ex);
+            }
+            viewPokemonGUI.setVisible(true);
+            getMainMenu().setVisible(false);
+            getMainMenuMusic().stop();
+            System.out.println("Clicked");
         }
     }
 
@@ -349,6 +307,20 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         } catch (CloneNotSupportedException ex) {
             throw new RuntimeException(ex);
         }
+
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+            viewPokemonGUI viewPokemonGUI = null;
+            try {
+                viewPokemonGUI = new viewPokemonGUI(getMainMenu(), getMainMenuMusic(), getSelectedPokemon());
+            } catch (IOException | ClassNotFoundException | LineUnavailableException |
+                     UnsupportedAudioFileException | FontFormatException | CloneNotSupportedException ex) {
+                throw new RuntimeException(ex);
+            }
+            viewPokemonGUI.setVisible(true);
+            getMainMenu().setVisible(false);
+            getMainMenuMusic().stop();
+            System.out.println("Clicked");
+        }
     }
 
     private void updatePanels() throws CloneNotSupportedException {
@@ -380,7 +352,9 @@ public class PokedexGUI extends JFrame implements MenuDesign {
 
         //  Updates our enlarged panel
         getEnlargedPanel().setPokemon(getPokedex().selectPokemon(selectIndex.getPokemonIndex()));
+        setSelectedPokemon(getEnlargedPanel().getPokemon());
 
+        //  When panel updates, play select sound
         AudioInputStream SELECT_SOUND = null;
         try {
             SELECT_SOUND = new AudioHandler().getAudio("selectSoundEffect.wav");
@@ -422,5 +396,102 @@ public class PokedexGUI extends JFrame implements MenuDesign {
         pokemonPanels.add(pokemonPanel4);
         pokemonPanels.add(pokemonPanel5);
         return pokemonPanels;
+    }
+
+    public void setSelectIndex(IndexManager selectIndex) {
+        this.selectIndex = selectIndex;
+    }
+
+    public void setPokemonPanelsContainer(JPanel pokemonPanelsContainer) {
+        this.pokemonPanelsContainer = pokemonPanelsContainer;
+    }
+
+    public void setHeaderContainer(JPanel headerContainer) {
+        this.headerContainer = headerContainer;
+    }
+
+    public void setAddPokemonButton(JButton addPokemonButton) {
+        this.addPokemonButton = addPokemonButton;
+    }
+
+    public void setPokemonPanels(ArrayList<PokemonPanel> pokemonPanels) {
+        this.pokemonPanels = pokemonPanels;
+    }
+
+    public void setSearchBar(SearchBar searchBar) {
+        this.searchBar = searchBar;
+    }
+
+    public void setEnlargedPanel(PokemonPanel enlargedPanel) {
+        this.enlargedPanel = enlargedPanel;
+    }
+
+    public void setPokedex(Pokedex pokedex) {
+        this.pokedex = pokedex;
+    }
+
+    public void setLabelBackground(JLabel background) {
+        this.labelBackground = background;
+    }
+
+    public void setTitlePanel(JPanel titlePanel) {
+        this.titlePanel = titlePanel;
+    }
+    public void setSelectedPokemon(Pokemon selectedPokemon) {
+        this.selectedPokemon = selectedPokemon;
+    }
+    public JLabel getLabelBackground() {
+        return labelBackground;
+    }
+
+    public IndexManager getSelectIndex() {
+        return selectIndex;
+    }
+
+    public ArrayList<PokemonPanel> getPokemonPanels() {
+        return pokemonPanels;
+    }
+
+    public SearchBar getSearchBar() {
+        return searchBar;
+    }
+
+    public PokemonPanel getEnlargedPanel() {
+        return enlargedPanel;
+    }
+
+    public JPanel getPokemonPanelsContainer() {
+        return pokemonPanelsContainer;
+    }
+
+    public JPanel getHeaderContainer() { return headerContainer; }
+
+    public JButton getAddPokemonButton() { return addPokemonButton;}
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
+    public JPanel getTitlePanel() {
+        return titlePanel;
+    }
+
+    public Pokemon getSelectedPokemon() {
+        return selectedPokemon;
+    }
+
+    public Clip getMainMenuMusic() {
+        return mainMenuMusic;
+    }
+
+    public void setMainMenuMusic(Clip getMainMenuMusic) {
+        this.mainMenuMusic = getMainMenuMusic;
+    }
+
+    public JFrame getMainMenu() {
+        return mainMenu;
+    }
+
+    public void setMainMenu(JFrame mainMenu) {
+        this.mainMenu = mainMenu;
     }
 }

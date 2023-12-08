@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public interface MenuDesign {
     default Color PokemonPanels_COLOR_DEFAULT() {
-        return Color.white;
+        return Color.black;
     }
 
     default Color PokemonPanels_COLOR_SELECTED() {
@@ -27,7 +27,7 @@ public interface MenuDesign {
     }
 
     default Color PokemonPanelsText_COLOR_SELECTED() {
-        return Color.red;
+        return Color.white;
     }
 
     default Dimension ComponentsContainer_SIZE_DEFAULT() {
@@ -39,7 +39,7 @@ public interface MenuDesign {
     }
 
     default Color SearchBar_COLOR_DEFAULT() {
-        return Color.gray;
+        return Color.white;
     }
 
     default Dimension SearchBar_SIZE_DEFAULT() {
@@ -53,13 +53,27 @@ public interface MenuDesign {
     default Color AddPokemonButton_COLOR_DEFAULT() {
         return Color.black;
     }
+    default Color AddPokemonButton_COLOR_SELECTED() {
+        return Color.red;
+    }
     default Color AddPokemonButtonText_COLOR_DEFAULT() {
         return Color.white;
     }
 
-
     default Dimension AddPokemonButton_SIZE_DEFAULT() {
         return new Dimension(350, 100);
+    }
+
+    default Color TitleBar_COLOR_DEFAULT() {
+        return Color.black;
+    }
+
+    default Color TitleBarText_COLOR_DEFAULT() {
+        return Color.white;
+    }
+
+    default Color TitleBarButton_COLOR_SELECTED() {
+        return Color.red;
     }
 
 
