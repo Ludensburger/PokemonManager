@@ -29,29 +29,23 @@ public class ImageHandler {
         String FOLDER_PATH = "src" + File.separator + "img" + File.separator + "pokedex" + File.separator;
         String IMAGE_PATH = FOLDER_PATH + imageName;
 
-//        try {
-//            Image RAW_IMAGE = ImageIO.read(new File(IMAGE_PATH));
-//            Image SCALED_IMAGE = RAW_IMAGE.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//            IMAGE = new ImageIcon(SCALED_IMAGE);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
         return new ImageIcon(IMAGE_PATH);
     }
 
-    public ImageIcon getGIF(int width, int height, String folderName, String fileName) {
+    public ImageIcon getScaledPokedexIcon(int width, int height, String folderName, String fileName) {
         String FOLDER_PATH = "src" + File.separator + "img" + File.separator + "pokedex" + File.separator + folderName + File.separator;
         String IMAGE_PATH = FOLDER_PATH + fileName;
+        ImageIcon IMAGE = null;
 
-//        try {
-//            Image RAW_IMAGE = ImageIO.read(new File(IMAGE_PATH));
-//            Image SCALED_IMAGE = RAW_IMAGE.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-//            IMAGE = new ImageIcon(SCALED_IMAGE);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            Image RAW_IMAGE = ImageIO.read(new File(IMAGE_PATH));
+            Image SCALED_IMAGE = RAW_IMAGE.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            IMAGE = new ImageIcon(SCALED_IMAGE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        return new ImageIcon(IMAGE_PATH);
+
+        return IMAGE;
     }
 }
