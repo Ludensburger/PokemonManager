@@ -28,10 +28,7 @@ public class addPokemonGUI extends JFrame implements AddPokemonDesign {
 
     public addPokemonGUI(JFrame menu, Clip mainMenuMusic) throws IOException, ClassNotFoundException, LineUnavailableException, UnsupportedAudioFileException, FontFormatException, CloneNotSupportedException {
 
-        AudioInputStream BACKGROUND_MUSIC = new AudioHandler().getAudio("wildEncounter.wav");
-        Clip clip = AudioSystem.getClip();
-        clip.open(BACKGROUND_MUSIC);
-        clip.start();
+        new AudioHandler("rustborocity.wav").play(-1);
 
         //  Gets Icon
         ImageIcon ICON = new ImageHandler().getScaledPokedexIcon(64, 64, "icon","ico.png");
@@ -60,7 +57,7 @@ public class addPokemonGUI extends JFrame implements AddPokemonDesign {
         setMainMenu(menu);
         setMainMenuMusic(mainMenuMusic);
         setHeaderContainer(new JPanel());
-        setTitlePanel(new TitleBar(this, getMainMenu(), getMainMenuMusic(), clip).getTitlePanel());
+        setTitlePanel(new TitleBar(this, getMainMenu(), getMainMenuMusic(), new AudioHandler("selectSoundEffect.wav").getClip()).getTitlePanel());
         loadComponents();
     }
     private void loadComponents() throws CloneNotSupportedException, IOException, FontFormatException {

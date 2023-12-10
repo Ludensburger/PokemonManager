@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import pokemon.*;
 import pokemon.ui.PokedexGUI.PokedexGUI;
+import pokemon.ui.viewPokemonGUI.ViewPokemonGUI;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -14,7 +15,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class UIRunner {
     public static void main(String[] args) throws CloneNotSupportedException, IOException, ClassNotFoundException, FontFormatException, UnsupportedAudioFileException, LineUnavailableException {
+        startPokedexGUI();
+    }
+
+    public static void startPokedexGUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException, ClassNotFoundException, CloneNotSupportedException {
         Pokedex pokedex = new Pokedex();
-        PokedexGUI frame = new PokedexGUI();
+        pokedex.startPokedex();
+        PokedexGUI frame = new PokedexGUI(pokedex);
     }
 }

@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class AudioHandler {
-    public AudioHandler() {}
+    Clip clip;
+    AudioInputStream ais;
+    public AudioHandler(String fileName) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        setAis(getAudio(fileName));
+        setClip(AudioSystem.getClip());
+    }
 
     public AudioInputStream getAudio(String fileName) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         String FOLDER_PATH = "src" + File.separator + "audio";
@@ -13,5 +18,33 @@ public class AudioHandler {
         File AUDIO_FILE = new File(FILE_PATH);
 
         return AudioSystem.getAudioInputStream(AUDIO_FILE);
+    }
+
+    public Clip getClip() {
+        return clip;
+    }
+
+    public void setClip(Clip clip) {
+        this.clip = clip;
+    }
+
+    public AudioInputStream getAis() {
+        return ais;
+    }
+
+    public void setAis(AudioInputStream ais) {
+        this.ais = ais;
+    }
+
+    public void play(int loopCount) throws LineUnavailableException, IOException {
+        //  Retrieves music file
+        Clip clip = getClip();
+        clip.loop(loopCount);
+        clip.open(getAis());
+        clip.start();
+    }
+
+    public void pause() {
+        getClip().stop();
     }
 }

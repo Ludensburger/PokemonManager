@@ -48,4 +48,23 @@ public class ImageHandler {
 
         return IMAGE;
     }
+
+    public ImageIcon getPokemonTypeIcon(int width, int height, String fileName) {
+        String FOLDER_PATH = "src" + File.separator + "img" + File.separator + "pokemontypes" + File.separator;
+        String IMAGE_PATH = FOLDER_PATH + fileName;
+        ImageIcon IMAGE = null;
+
+        try {
+            Image RAW_IMAGE = ImageIO.read(new File(IMAGE_PATH));
+            Image SCALED_IMAGE = RAW_IMAGE.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            IMAGE = new ImageIcon(SCALED_IMAGE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return IMAGE;
+    }
+
+
 }

@@ -1,13 +1,10 @@
 package pokemon.ui.addPokemonGUI.components;
 
-import pokemon.ui.PokedexGUI.PokedexGUI;
-import pokemon.ui.PokedexGUI.design.MenuDesign;
+import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,7 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
-public class TitleBar implements MenuDesign {
+public class TitleBar implements MenuGUIDesign {
 
     private JPanel titlePanel;
     private JLabel icon;
