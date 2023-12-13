@@ -1,5 +1,6 @@
 package pokemon.ui.ViewPokemonGUI;
 
+import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.ui.ViewPokemonGUI.components.ViewPokemonComponentHandler;
 import pokemon.ui.components.Frame.FrameModel;
@@ -20,10 +21,11 @@ public class ViewPokemonFrame extends FrameModel {
 
     }
 
-    public void setUpViewFrame(Pokemon pokemon) throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException {
+    public void setUpViewFrame(Pokemon pokemon, Pokedex pokedex) throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException {
         //  Only need to add labelBackground as all other components are already added to the labelBackground
         if(getComponentHandler() == null) {
             ViewPokemonComponentHandler componentHandler = new ViewPokemonComponentHandler(
+                    pokedex,
                     getFrame(),
                     pokemon,
                     getFrameBackgroundImage()

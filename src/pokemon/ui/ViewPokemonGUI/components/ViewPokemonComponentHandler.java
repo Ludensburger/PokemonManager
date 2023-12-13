@@ -1,8 +1,8 @@
 package pokemon.ui.ViewPokemonGUI.components;
 
+import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
-import pokemon.ui.ViewPokemonGUI.ViewPokemonFrame;
 import pokemon.util.AudioHandler;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
@@ -23,13 +23,15 @@ public class ViewPokemonComponentHandler implements Cloneable {
     private JPanel bodyContainer;
     private JPanel typeImageContainer;
     private JPanel pokemonImageContainer;
+    private ViewPokemonButtonsContainer viewPokemonButtonsContainer;
     private JPanel infoContainer;
     private JFrame viewPokemonFrame;
+    private Pokedex pokedex;
     private static final Dimension HEADER_CONTAINER_SIZE = (new Dimension(500, 100));
     private static final Dimension BODY_CONTAINER_SIZE = (new Dimension(500, 570));
     private static final Dimension TYPE_IMAGE_CONTAINER_SIZE  = (new Dimension(500,50));
     private static final Dimension POKEMON_IMAGE_CONTAINER_SIZE = (new Dimension(500, 300));
-    private static final Dimension INFO_CONTAINER_SIZE = (new Dimension(500, 270));
+    private static final Dimension INFO_CONTAINER_SIZE = (new Dimension(500, 150));
     private static final int POKEMON_WIDTH_DEFAULT = 300;
     private static final int POKEMON_HEIGHT_DEFAULT = 300;
     private static final int TYPE_WIDTH_DEFAULT = 100;
@@ -37,12 +39,16 @@ public class ViewPokemonComponentHandler implements Cloneable {
     private static final String FONT_NAME = "pokemonRedBlue.ttf";
     private static final float HEADER_FONT_SIZE = 32f;
     private static final float BODY_FONT_SIZE = 16f;
+    private static final Color BACKGROUND_COLOR = Color.black;
+    private static final Color FOREGROUND_COLOR = Color.white;
 
 
-    public ViewPokemonComponentHandler(JFrame frame, Pokemon pokemon, ImageIcon backgroundImage) throws IOException, FontFormatException, UnsupportedAudioFileException, LineUnavailableException {
+    public ViewPokemonComponentHandler(Pokedex pokedex, JFrame frame, Pokemon pokemon, ImageIcon backgroundImage) throws IOException, FontFormatException, UnsupportedAudioFileException, LineUnavailableException {
         setViewPokemonMusic("rustborocity.wav");
+        setPokedex(pokedex);
         setSelectedPokemon(pokemon);
         setViewPokemonFrame(frame);
+        setButtonsContainer(new ViewPokemonButtonsContainer(new FontHandler().getFont(FONT_NAME, BODY_FONT_SIZE), FOREGROUND_COLOR, BACKGROUND_COLOR, getPokedex(), getSelectedPokemon()));
         setTitleBarContainer(new ViewPokemonTitleBar(getViewPokemonFrame(), getViewPokemonMusic()).getTitlePanel());
         setHeaderContainer(new JPanel());
         setTypeImageContainer(new JPanel());
@@ -128,6 +134,7 @@ public class ViewPokemonComponentHandler implements Cloneable {
         bodyContainer.add(getPokemonImageContainer());
         bodyContainer.add(getTypeImageContainer());
         bodyContainer.add(getInfoContainer());
+        bodyContainer.add(getButtonsContainer().getContainer());
         this.bodyContainer = bodyContainer;
     }
 
@@ -226,6 +233,22 @@ public class ViewPokemonComponentHandler implements Cloneable {
 
     public void setViewPokemonFrame(JFrame viewPokemonFrame) {
         this.viewPokemonFrame = viewPokemonFrame;
+    }
+
+    public ViewPokemonButtonsContainer getButtonsContainer() {
+        return viewPokemonButtonsContainer;
+    }
+
+    public void setButtonsContainer(ViewPokemonButtonsContainer viewPokemonButtonsContainer) {
+        this.viewPokemonButtonsContainer = viewPokemonButtonsContainer;
+    }
+
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
+    public void setPokedex(Pokedex pokedex) {
+        this.pokedex = pokedex;
     }
 
     @Override

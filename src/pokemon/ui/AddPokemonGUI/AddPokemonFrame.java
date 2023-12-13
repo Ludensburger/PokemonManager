@@ -17,6 +17,7 @@ public class AddPokemonFrame extends FrameModel {
         super(500, 720);
 
         setPokedex(pokedex);
+        
         getFrame().setLocationRelativeTo(null);
 
         AddPokemonComponentHandler componentHandler = new AddPokemonComponentHandler(

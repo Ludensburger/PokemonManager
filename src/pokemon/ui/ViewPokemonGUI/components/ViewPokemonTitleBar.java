@@ -19,7 +19,6 @@ import java.io.IOException;
 
 public class ViewPokemonTitleBar extends TitleBarModel {
     private AudioHandler viewPokemonMusic;
-    private JButton backButton;
     private JFrame viewPokemonFrame;
 
     public ViewPokemonTitleBar(JFrame viewPokemonFrame, AudioHandler viewPokemonMusic) throws IOException, FontFormatException {
@@ -27,28 +26,10 @@ public class ViewPokemonTitleBar extends TitleBarModel {
 
         setViewPokemonFrame(viewPokemonFrame);
         setViewPokemonMusic(viewPokemonMusic);
-        setBackButton(new JButton());
 
-        super.getButtonContainer().setPreferredSize(new Dimension(150,50));
-        super.getButtonContainer().add(getBackButton(), BorderLayout.WEST);
+        super.getButtonContainer().setPreferredSize(new Dimension(100,50));
     }
 
-    public JButton getBackButton() {
-        return backButton;
-    }
-    public void setBackButton(JButton backButton) throws IOException, FontFormatException {
-        ButtonModel.ButtonUtil.setupButton(backButton,
-                "<",
-                e -> {
-                    try {
-                        closeViewPokemonFrame();
-                    } catch (LineUnavailableException | IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-        );
-        this.backButton = backButton;
-    }
 
     public void closeViewPokemonFrame() throws LineUnavailableException, IOException {
         UIRunner.getInstance().closeViewPokemonGUI();

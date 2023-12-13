@@ -1,48 +1,67 @@
 package pokemon.ui.AddPokemonGUI.components;
 
 import pokemon.Pokedex;
+import pokemon.Pokemon;
 import pokemon.PokemonType;
+import pokemon.ui.UIRunner;
 import pokemon.util.FontHandler;
+import pokemon.util.ImageHandler;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class AddPokemonComponentHandler {
     private JLabel labelBackground;
     private JPanel titleBarContainer;
     private JPanel bodyContainer;
-    private JPanel pokemonNameContainer;
-    private JPanel pokemonImageContainer;
-    private JPanel pokemonTypeContainer;
-    private JPanel pokemonDescriptionContainer;
-    private JTextField pokemonName;
+    private NameContainer pokemonNameContainer;
+    private SelectFileContainer selectFileContainer;
+    private TypeComboBoxContainer pokemonTypeContainer;
+    private DescriptionBoxContainer pokemonDescriptionContainer;
+    private AddPokemonButtonsContainer addPokemonButtonsContainer;
+    private JPanel fileImageContainer;
+    private JLabel fileImageLabel;
+    private File fileImage;
+    private String pokemonName;
+    private String pokemonDescription;
     private PokemonType primaryType;
     private PokemonType secondaryType;
-    private JTextArea pokemonDescription;
-    Pokedex pokedex;
-    Font font;
+    private JButton cancelButton;
+    private JButton saveButton;
+    private int pokemonId;
+    private Pokedex pokedex;
+    private Font font;
     private static final String FONT_NAME = "pokemonRedBlue.ttf";
     private static final float FONT_SIZE = 16f;
     private static final Color BACKGROUND_COLOR = Color.black;
     private static final Color FOREGROUND_COLOR = Color.white;
-    private static final Dimension NAME_CONTAINER_SIZE = (new Dimension(200, 50));
-    private static final Dimension TYPE_CONTAINER_SIZE = (new Dimension(300, 200));
-
-    private static final Dimension DESCRIPTION_CONTAINER_SIZE = (new Dimension(500, 200));
-
-
+    private static final int IMAGE_WIDTH = 170;
+    private static final int IMAGE_HEIGHT = 170;
 
 
     public AddPokemonComponentHandler(JFrame frame, Pokedex pokedex, ImageIcon backgroundImage) throws IOException, FontFormatException {
         setFont(new FontHandler().getFont(FONT_NAME, FONT_SIZE));
         setPokedex(pokedex);
-        setPokemonNameContainer(new JPanel());
-        setPokemonTypeContainer(new JPanel());
-        setPokemonDescription(new JTextArea());
+        setPokemonId(pokedex.getPokemonHashMap().size() + 1);
+        setFileImageLabel(new JLabel());
+        setFileImageContainer(new JPanel());
+        setPokemonNameContainer(new NameContainer(getFont(), FOREGROUND_COLOR, BACKGROUND_COLOR));
+        setPokemonTypeContainer(new TypeComboBoxContainer(getFont(), FOREGROUND_COLOR, BACKGROUND_COLOR));
+        setPokemonDescriptionContainer(new DescriptionBoxContainer(getFont(), FOREGROUND_COLOR, BACKGROUND_COLOR));
+        setSelectFileContainer(new SelectFileContainer(getFont(), FOREGROUND_COLOR, BACKGROUND_COLOR, getPokemonId(), getBodyContainer()));
         setBodyContainer(new JPanel());
+        setButtonsContainer(new AddPokemonButtonsContainer(getFont(), FOREGROUND_COLOR, BACKGROUND_COLOR));
+        setCancelButton(getButtonsContainer().getCancelButton());
+        setSaveButton(getButtonsContainer().getSavePokemon());
         setTitleBarContainer(new AddPokemonTitleBar(frame).getTitlePanel());
         setLabelBackground(new JLabel(backgroundImage));
     }
@@ -63,7 +82,7 @@ public class AddPokemonComponentHandler {
             labelBackground.setLayout(new BorderLayout());
             labelBackground.add(getTitleBarContainer(), BorderLayout.NORTH);
             labelBackground.add(getBodyContainer(), BorderLayout.CENTER);
-
+            labelBackground.add(getButtonsContainer().getContainer(), BorderLayout.SOUTH);
         this.labelBackground = labelBackground;
     }
 
@@ -74,10 +93,10 @@ public class AddPokemonComponentHandler {
     public void setBodyContainer(JPanel bodyContainer) {
         bodyContainer.setLayout(new BorderLayout());
         bodyContainer.setOpaque(false);
-        bodyContainer.add(getPokemonNameContainer(), BorderLayout.NORTH);
-//            bodyContainer.add(getPokemonImageContainer(), BorderLayout.WEST);
-        bodyContainer.add(getPokemonTypeContainer(),  BorderLayout.EAST);
-        bodyContainer.add(getPokemonDescription(), BorderLayout.SOUTH);
+        bodyContainer.add(getPokemonNameContainer().getContainer(), BorderLayout.NORTH);
+        bodyContainer.add(getSelectFileContainer().getContainer(), BorderLayout.WEST);
+        bodyContainer.add(getPokemonTypeContainer().getContainer(),  BorderLayout.EAST);
+        bodyContainer.add(getPokemonDescriptionContainer().getContainer(), BorderLayout.SOUTH);
         bodyContainer.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
                 bodyContainer.getBorder()));
@@ -85,60 +104,153 @@ public class AddPokemonComponentHandler {
         this.bodyContainer = bodyContainer;
     }
 
-    public JPanel getPokemonNameContainer() {
+    public void selectFile(ActionEvent e) throws RuntimeException {
+        if(e.getSource() == getSelectFileContainer().getSelectFileButton()) {
+            JFileChooser fileChooser = new JFileChooser();
+
+            int response = fileChooser.showSaveDialog(getBodyContainer());
+
+            if(response == JFileChooser.APPROVE_OPTION) {
+                File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+
+                String newFileName = String.format("%03d", getPokemonId()) + ".png";
+
+                File newFile = new File(new ImageHandler().getPOKEMONS_FOLDER(), newFileName);
+                setFileImage(newFile);
+                try {
+                    // Move the original file to the new location
+                    Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("File saved and uploaded to: " + newFile.getAbsolutePath());
+                    Image rawImage = ImageIO.read(file);
+                    Image scaledImage = rawImage.getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH);
+                    ImageIcon image = new ImageIcon(scaledImage);
+                    getFileImageLabel().setIcon(image);
+                } catch (RuntimeException | IOException ex) {
+                    throw new RuntimeException();
+                }
+            }
+        }
+    }
+
+    public JPanel getFileImageContainer() {
+        return fileImageContainer;
+    }
+
+    public void setFileImageContainer(JPanel fileImageContainer) {
+        fileImageContainer.add(getFileImageLabel());
+        fileImageContainer.setPreferredSize(new Dimension(IMAGE_WIDTH, IMAGE_HEIGHT));
+        fileImageContainer.setOpaque(false);
+        this.fileImageContainer = fileImageContainer;
+    }
+
+    public SelectFileContainer getSelectFileContainer() {
+        return selectFileContainer;
+    }
+
+    public void setSelectFileContainer(SelectFileContainer selectFileContainer) {
+        selectFileContainer.getSelectFileButton().addActionListener(this::selectFile);
+        this.selectFileContainer = selectFileContainer;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public void setCancelButton(JButton cancelButton) {
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == getCancelButton()) {
+                    if(getFileImage() != null) {
+                        boolean deleted = getFileImage().delete();
+                        if(deleted){
+                            System.out.println("File: " + getFileImage().getName() + " has been deleted!");
+                            getFileImageLabel().setIcon(null);
+                        } else {
+                            System.out.println("Trouble deleting file!");
+                        }
+                    }
+                    try {
+                        UIRunner.getInstance().openPokedexGUI();
+                    } catch (LineUnavailableException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    UIRunner.getInstance().closeAddPokemonGUI();
+                }
+            }
+        });
+        this.cancelButton = cancelButton;
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public void setSaveButton(JButton saveButton) {
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setPokemonName(getPokemonNameContainer().getNameTextField().getText().toUpperCase());
+                setPokemonDescription(getPokemonDescriptionContainer().getDescriptionTextArea().getText().toUpperCase());
+                setPrimaryType((PokemonType) getPokemonTypeContainer().getPrimaryTypeJComboBox().getSelectedItem());
+                setSecondaryType((PokemonType) getPokemonTypeContainer().getSecondaryTypeJComboBox().getSelectedItem());
+
+                if(e.getSource() == getSaveButton()) {
+                    Pokemon.PokemonBuilder newPokemon = new Pokemon.PokemonBuilder(getPokemonName(), getPokemonId());
+                    newPokemon.setDescription(getPokemonDescription());
+                    newPokemon.setPrimaryType(getPrimaryType());
+                    if(getSecondaryType() != null) {
+                        newPokemon.setSecondaryType(getSecondaryType());
+                    } else {
+                        newPokemon.setSecondaryType(null);
+                    }
+
+                    getPokedex().addPokemon(newPokemon.build());
+                    try {
+                        getPokedex().savePokedex();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    JOptionPane.showMessageDialog(null, "Pokemon saved!");
+                    UIRunner.getInstance().closeAddPokemonGUI();
+
+                    try {
+                        UIRunner.getInstance().restartPokedexGUI();
+                    } catch (LineUnavailableException | IOException | CloneNotSupportedException |
+                             UnsupportedAudioFileException | FontFormatException | ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+        this.saveButton = saveButton;
+    }
+
+    public NameContainer getPokemonNameContainer() {
         return pokemonNameContainer;
     }
 
-    public void setPokemonNameContainer(JPanel pokemonNameContainer) {
-        Dimension LABEL_SIZE = new Dimension(200, 100);
-        JLabel label = new JLabel("NAME");
+    public void setPokemonNameContainer(NameContainer pokemonNameContainer) {
 
-            label.setFont(getFont());
-            label.setForeground(FOREGROUND_COLOR);
-            label.setPreferredSize(LABEL_SIZE);
-            label.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(0, 20, 0, 20),
-                    label.getBorder()));
-
-        Dimension NAME_SIZE = new Dimension(350, 100);
-        JTextField name = new JTextField();
-
-            name.setFont(getFont());
-            name.setPreferredSize(NAME_SIZE);
-            name.setForeground(BACKGROUND_COLOR);
-            name.setBackground(FOREGROUND_COLOR);
-            name.setBorder(null);
-            name.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(0, 20, 0, 20),
-                    name.getBorder()));
-
-            pokemonNameContainer.setPreferredSize(NAME_CONTAINER_SIZE);
-            pokemonNameContainer.setBackground(BACKGROUND_COLOR);
-            pokemonNameContainer.setLayout(new BorderLayout());
-            pokemonNameContainer.add(label, BorderLayout.WEST);
-            pokemonNameContainer.add(name, BorderLayout.EAST);
-
-        setPokemonName(name);
         this.pokemonNameContainer = pokemonNameContainer;
     }
 
-    public JPanel getPokemonImageContainer() {
-        return pokemonImageContainer;
-    }
-
-    public void setPokemonImageContainer(JPanel pokemonImageContainer) {
-        this.pokemonImageContainer = pokemonImageContainer;
-    }
-
-    public JPanel getPokemonTypeContainer() {
+    public TypeComboBoxContainer getPokemonTypeContainer() {
         return pokemonTypeContainer;
     }
 
-    public void setPokemonTypeContainer(JPanel pokemonTypeContainer) {
-        TypeComboBox comboBox = new TypeComboBox(pokemonTypeContainer, getFont());
-
-        comboBox.getContainer().setPreferredSize(TYPE_CONTAINER_SIZE);
+    public void setPokemonTypeContainer(TypeComboBoxContainer pokemonTypeContainer) {
         this.pokemonTypeContainer = pokemonTypeContainer;
+    }
+
+    public DescriptionBoxContainer getPokemonDescriptionContainer() {
+        return pokemonDescriptionContainer;
+    }
+
+    public void setPokemonDescriptionContainer(DescriptionBoxContainer pokemonDescriptionContainer) {
+        pokemonDescriptionContainer.getContainer().add(getFileImageContainer(), BorderLayout.NORTH);
+        this.pokemonDescriptionContainer = pokemonDescriptionContainer;
     }
 
     public Pokedex getPokedex() {
@@ -157,11 +269,11 @@ public class AddPokemonComponentHandler {
         this.font = font;
     }
 
-    public JTextField getPokemonName() {
+    public String getPokemonName() {
         return pokemonName;
     }
 
-    public void setPokemonName(JTextField pokemonName) {
+    public void setPokemonName(String pokemonName) {
         this.pokemonName = pokemonName;
     }
 
@@ -181,34 +293,43 @@ public class AddPokemonComponentHandler {
         this.secondaryType = secondaryType;
     }
 
-    public JTextArea getPokemonDescription() {
+    public String getPokemonDescription() {
         return pokemonDescription;
     }
 
-    public void setPokemonDescription(JTextArea pokemonDescription) {
-        JLabel label = new JLabel("DESCRIPTION");
-            label.setForeground(FOREGROUND_COLOR);
-            label.setFont(getFont());
-
-        pokemonDescription.add(label);
-        pokemonDescription.setPreferredSize(DESCRIPTION_CONTAINER_SIZE);
-        pokemonDescription.setBackground(BACKGROUND_COLOR);
-        pokemonDescription.setForeground(FOREGROUND_COLOR);
-        pokemonDescription.setFont(getFont());
-        pokemonDescription.isEnabled();
-        pokemonDescription.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                pokemonDescription.getBorder()));
-        pokemonDescription.setLineWrap(true);
-        pokemonDescription.setWrapStyleWord(true);
+    public void setPokemonDescription(String pokemonDescription) {
         this.pokemonDescription = pokemonDescription;
     }
 
-    public JPanel getPokemonDescriptionContainer() {
-        return pokemonDescriptionContainer;
+    public int getPokemonId() {
+        return pokemonId;
     }
 
-    public void setPokemonDescriptionContainer(JPanel pokemonDescriptionContainer) {
-        this.pokemonDescriptionContainer = pokemonDescriptionContainer;
+    public void setPokemonId(int pokemonId) {
+        this.pokemonId = pokemonId;
+    }
+
+    public JLabel getFileImageLabel() {
+        return fileImageLabel;
+    }
+
+    public void setFileImageLabel(JLabel fileImageLabel) {
+        this.fileImageLabel = fileImageLabel;
+    }
+
+    public AddPokemonButtonsContainer getButtonsContainer() {
+        return addPokemonButtonsContainer;
+    }
+
+    public void setButtonsContainer(AddPokemonButtonsContainer addPokemonButtonsContainer) {
+        this.addPokemonButtonsContainer = addPokemonButtonsContainer;
+    }
+
+    public File getFileImage() {
+        return fileImage;
+    }
+
+    public void setFileImage(File fileImage) {
+        this.fileImage = fileImage;
     }
 }

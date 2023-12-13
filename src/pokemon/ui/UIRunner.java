@@ -20,6 +20,7 @@ public class UIRunner {
 
     private static UIRunner instance;
     private PokedexFrame PokedexGUI;
+    private Pokedex pokedex;
     private ViewPokemonFrame ViewPokemonGUI;
     private AddPokemonFrame AddPokemonGUI;
     private UIRunner() {}
@@ -40,8 +41,9 @@ public class UIRunner {
     public void startPokedexGUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException, ClassNotFoundException, CloneNotSupportedException {
         Pokedex pokedex = new Pokedex();
         pokedex.startPokedex();
-        PokedexFrame pokedexGUI = new PokedexFrame(pokedex);
-        AddPokemonFrame addPokemonGUI = new AddPokemonFrame(pokedex);
+        setPokedex(pokedex);
+        PokedexFrame pokedexGUI = new PokedexFrame(getPokedex());
+        AddPokemonFrame addPokemonGUI = new AddPokemonFrame(getPokedex());
         ViewPokemonFrame viewPokemonFrame = new ViewPokemonFrame();
 
         setPokedexGUI(pokedexGUI);
@@ -56,8 +58,17 @@ public class UIRunner {
         getPokedexGUI().setVisible(true);
     }
 
+    public void restartPokedexGUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException, CloneNotSupportedException, ClassNotFoundException {
+        getPokedexGUI().dispose();
+        Pokedex pokedex = new Pokedex();
+        pokedex.startPokedex();
+        setPokedex(pokedex);
+        setPokedexGUI(new PokedexFrame(pokedex));
+        openPokedexGUI();
+    }
+
     public void openViewPokemonGUI(Pokemon pokemon) throws LineUnavailableException, IOException, UnsupportedAudioFileException, FontFormatException {
-        getViewPokemonGUI().setUpViewFrame(pokemon);
+        getViewPokemonGUI().setUpViewFrame(pokemon, getPokedex());
         getViewPokemonGUI().getFrameMusic().play(Clip.LOOP_CONTINUOUSLY);
         getViewPokemonGUI().setVisible(true);
     }
@@ -109,5 +120,13 @@ public class UIRunner {
 
     public static void setInstance(UIRunner instance) {
         UIRunner.instance = instance;
+    }
+
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
+    public void setPokedex(Pokedex pokedex) {
+        this.pokedex = pokedex;
     }
 }

@@ -23,6 +23,10 @@ public class Pokedex {
         setPokemonHashMap(PokeFile.readPokeFile());
     }
 
+    public void savePokedex() throws IOException {
+        PokeFile.writePokeFile(getPokemonHashMap());
+    }
+
     public void addPokemon(Pokemon pokemon) {
         getPokemonHashMap().put(pokemon.getId(), pokemon);
     }

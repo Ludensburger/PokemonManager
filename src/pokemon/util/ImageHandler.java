@@ -7,10 +7,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageHandler {
-    private static final String IMG_FOLDER = "src" + File.separator + "img" + File.separator;
-    private static final String POKEMONS_FOLDER = IMG_FOLDER + "pokemons" + File.separator;
-    private static final String POKEDEX_FOLDER = IMG_FOLDER + "pokedex" + File.separator;
-    private static final String POKEMON_TYPES_FOLDER = IMG_FOLDER + "pokemontypes" + File.separator;
+    private final String IMG_FOLDER = "src" + File.separator + "img" + File.separator;
+    private final String POKEMONS_FOLDER = getIMG_FOLDER() + "pokemons" + File.separator;
+    private final String POKEDEX_FOLDER = getIMG_FOLDER() + "pokedex" + File.separator;
+    private final String POKEMON_TYPES_FOLDER = getIMG_FOLDER() + "pokemontypes" + File.separator;
 
     public ImageHandler() {}
 
@@ -33,19 +33,39 @@ public class ImageHandler {
         return image;
     }
 
+    public File getPokemonImageFile(int pokemonId) {
+        return new File(getPOKEMONS_FOLDER() + String.format("%03d", pokemonId) + ".png");
+    }
+
     public ImageIcon getPokemonImage(int width, int height, int pokemonId, boolean isGIF) {
-        return loadImage(POKEMONS_FOLDER, String.format("%03d", pokemonId) + ".png", width, height, isGIF);
+        return loadImage(getPOKEMONS_FOLDER(), String.format("%03d", pokemonId) + ".png", width, height, isGIF);
     }
 
     public ImageIcon getPokedexImage(int width, int height, String imageName, boolean isGIF) {
-        return loadImage(POKEDEX_FOLDER, imageName, width, height, isGIF);
+        return loadImage(getPOKEDEX_FOLDER(), imageName, width, height, isGIF);
     }
 
     public ImageIcon getScaledPokedexIcon(int width, int height, String folderName, String fileName, boolean isGIF) {
-        return loadImage(POKEDEX_FOLDER + folderName + File.separator, fileName, width, height, isGIF);
+        return loadImage(getPOKEDEX_FOLDER() + folderName + File.separator, fileName, width, height, isGIF);
     }
 
     public ImageIcon getPokemonTypeIcon(int width, int height, String fileName, boolean isGIF) {
-        return loadImage(POKEMON_TYPES_FOLDER, fileName, width, height, isGIF);
+        return loadImage(getPOKEMON_TYPES_FOLDER(), fileName, width, height, isGIF);
+    }
+
+    public String getIMG_FOLDER() {
+        return IMG_FOLDER;
+    }
+
+    public String getPOKEMONS_FOLDER() {
+        return POKEMONS_FOLDER;
+    }
+
+    public String getPOKEDEX_FOLDER() {
+        return POKEDEX_FOLDER;
+    }
+
+    public String getPOKEMON_TYPES_FOLDER() {
+        return POKEMON_TYPES_FOLDER;
     }
 }
