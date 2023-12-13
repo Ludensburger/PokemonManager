@@ -1,7 +1,8 @@
 package pokemon.ui.PokedexGUI.actions;
 
 import pokemon.Pokemon;
-import pokemon.ui.viewPokemonGUI.ViewPokemonGUI;
+import pokemon.ui.UIRunner;
+import pokemon.ui.ViewPokemonGUI.ViewPokemonFrame;
 import pokemon.util.AudioHandler;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -40,31 +41,29 @@ public class HandleKeys {
 
                 if(e.getKeyCode() == KeyEvent.VK_UP) {
                     getPanelPainter().getNavigatorInstance().moveUp();
-                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    getPanelPainter().getNavigatorInstance().moveDown(getMAX_POKEMON(), getMAX_POKEMON_PANELS());
-                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Pokemon selectedPokemon = getPanelPainter().getEnlargedPokemonPanel().getPokemon();
                     try {
-                        ViewPokemonGUI viewPokemonGUI = new ViewPokemonGUI(selectedPokemon);
-                        viewPokemonGUI.setVisible(true);
-                    } catch (IOException | FontFormatException | UnsupportedAudioFileException |
-                             LineUnavailableException ex) {
+                        getPanelPainter().paintPanels();
+                    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
                         throw new RuntimeException(ex);
                     }
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    getPanelPainter().getNavigatorInstance().moveDown(getMAX_POKEMON(), getMAX_POKEMON_PANELS());
+                    try {
+                        getPanelPainter().paintPanels();
+                    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    Pokemon selectedPokemon = getPanelPainter().getEnlargedPokemonPanel().getPokemon();
 
-                    getMainMenuFrame().setVisible(false);
-                    getMainMenuMusic().pause();
-                    getMainMenuFrame().dispose();
+                    try {
+                        UIRunner.getInstance().closePokedexGUI();
+                        UIRunner.getInstance().openViewPokemonGUI(selectedPokemon);
+                    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException |
+                             FontFormatException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
-
-                try {
-                    getPanelPainter().paintPanels();
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-
-
             }
         };
     }

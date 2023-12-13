@@ -5,6 +5,7 @@ import pokemon.Pokemon;
 import pokemon.ui.PokedexGUI.components.EnlargedPokemonPanel;
 import pokemon.ui.PokedexGUI.components.PokemonPanel;
 import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
+import pokemon.ui.PokedexGUI.design.PanelColors;
 import pokemon.util.AudioHandler;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -13,16 +14,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PanelPainter implements MenuGUIDesign {
+public class PanelPainter implements PanelColors {
 
     private static PanelPainter instance;
-
     private ArrayList<PokemonPanel> pokemonPanels;
-
     private EnlargedPokemonPanel enlargedPokemonPanel;
-
     private PanelNavigator navigatorInstance;
-
     private Pokedex pokedex;
 
     private PanelPainter() {}
@@ -80,13 +77,10 @@ public class PanelPainter implements MenuGUIDesign {
     }
 
     public void stylePanel(PokemonPanel panel, boolean isSelected) {
-        Color panelColor = isSelected ? PokemonPanels_COLOR_SELECTED() : PokemonPanels_COLOR_DEFAULT();
-        Color textColor = isSelected ? PokemonPanelsText_COLOR_SELECTED() : PokemonPanelsText_COLOR_DEFAULT();
+        Color panelColor = isSelected ? PANEL_BACKGROUND_COLOR_SELECTED : PANEL_BACKGROUND_COLOR_DEFAULT;
 
         panel.getPokemonPanel().setBackground(panelColor);
         panel.getComponents().setBackground(panelColor);
-        panel.getPokemonName().setForeground(textColor);
-        panel.getPokemonId().setForeground(textColor);
     }
 
     private void updateEnlargedPanel() throws UnsupportedAudioFileException, LineUnavailableException, IOException {

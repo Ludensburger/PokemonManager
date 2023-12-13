@@ -39,8 +39,10 @@ public class AudioHandler {
     public void play(int loopCount) throws LineUnavailableException, IOException {
         //  Retrieves music file
         Clip clip = getClip();
+        if(!clip.isOpen()) {
+            clip.open(getAis());
+        }
         clip.loop(loopCount);
-        clip.open(getAis());
         clip.start();
     }
 

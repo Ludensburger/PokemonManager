@@ -1,4 +1,4 @@
-package pokemon.ui.viewPokemonGUI.design;
+package pokemon.ui.ViewPokemonGUI.design;
 
 import java.awt.*;
 

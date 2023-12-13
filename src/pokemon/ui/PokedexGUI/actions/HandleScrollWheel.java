@@ -24,10 +24,20 @@ public class HandleScrollWheel {
         setMAX_POKEMON_PANELS(5);
     }
 
-    public MouseWheelListener addHandleScrollWheel()  {
+    public MouseWheelListener addHandleScrollWheel() {
         return new MouseWheelListener() {
+            private long lastEventTime = 0;
+            private static final long COOLDOWN_PERIOD = 100;
+
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
+                long currentTime = System.currentTimeMillis();
+
+                if (currentTime - lastEventTime < COOLDOWN_PERIOD) {
+                    return;
+                }
+                lastEventTime = currentTime;
+
                 setWheelRotation(e.getWheelRotation());
 
                 if (getWheelRotation() > 0) {
@@ -41,10 +51,10 @@ public class HandleScrollWheel {
                 } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
-
             }
         };
     }
+
 
     public int getWheelRotation() {
         return WHEEL_ROTATION;

@@ -25,6 +25,7 @@ public enum PokemonType {
     STEEL,
     FAIRY;
 
+
     /**
      * To be removed once GUI has "Add Pokemon" implemented.
      * @return

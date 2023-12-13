@@ -20,14 +20,11 @@ public class MenuComponentHandler implements MenuGUIDesign {
     private JPanel titleBarContainer;
     private JPanel enlargedPanelContainer;
     private ArrayList<PokemonPanel> pokemonPanels;
-    private AudioHandler mainMenuMusic;
     private EnlargedPokemonPanel enlargedPokemonPanel;
     private PanelPainter panelPainter;
     private final PanelNavigator panelNavigator = PanelNavigator.getInstance();
 
-    public MenuComponentHandler(JFrame frame, Pokedex pokedex, ImageIcon backgroundImage) throws IOException, FontFormatException, CloneNotSupportedException, UnsupportedAudioFileException, LineUnavailableException {
-        setMainMenuMusic("rustborocity.wav");
-        getMainMenuMusic().play(-1);
+    public MenuComponentHandler(JFrame frame, Pokedex pokedex, ImageIcon backgroundImage, AudioHandler mainMenuMusic) throws IOException, FontFormatException, CloneNotSupportedException, UnsupportedAudioFileException, LineUnavailableException {
 
         setEnlargedPanelContainer(new JPanel(), pokedex);
         setPokemonPanels(pokedex, 5);
@@ -39,7 +36,7 @@ public class MenuComponentHandler implements MenuGUIDesign {
 
         setPokemonPanelsContainer(new JPanel(), pokedex);
         setTitleBarContainer(new MenuTitleBar(frame).getTitlePanel());
-        setHeaderContainer(new JPanel(), frame);
+        setHeaderContainer(new JPanel(), frame, mainMenuMusic);
         setLabelBackground(new JLabel(backgroundImage));
 
         getPanelPainter().setPokemonPanels(getPokemonPanels());
@@ -91,9 +88,9 @@ public class MenuComponentHandler implements MenuGUIDesign {
         return headerContainer;
     }
 
-    public void setHeaderContainer(JPanel headerContainer, JFrame frame) throws IOException, FontFormatException, LineUnavailableException {
-        SearchBar searchBar = new SearchBar(getPanelPainter(), frame, getMainMenuMusic());
-        AddPokemonButton pokemonButton = new AddPokemonButton(frame, getMainMenuMusic());
+    public void setHeaderContainer(JPanel headerContainer, JFrame frame, AudioHandler mainMenuMusic) throws IOException, FontFormatException, LineUnavailableException {
+        SearchBar searchBar = new SearchBar(getPanelPainter(), frame, mainMenuMusic);
+        AddPokemonButton pokemonButton = new AddPokemonButton(frame, mainMenuMusic);
 
         headerContainer.setLayout(new BorderLayout());
         headerContainer.add(getTitleBarContainer(),  BorderLayout.NORTH);
@@ -148,14 +145,6 @@ public class MenuComponentHandler implements MenuGUIDesign {
 
     public void setEnlargedPokemonPanel(EnlargedPokemonPanel enlargedPokemonPanel) {
         this.enlargedPokemonPanel = enlargedPokemonPanel;
-    }
-
-    public AudioHandler getMainMenuMusic() {
-        return mainMenuMusic;
-    }
-
-    public void setMainMenuMusic(String fileName) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        this.mainMenuMusic = new AudioHandler(fileName);
     }
 
     public PanelPainter getPanelPainter() {

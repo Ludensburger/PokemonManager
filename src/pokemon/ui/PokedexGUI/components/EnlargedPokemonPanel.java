@@ -24,7 +24,7 @@ public class EnlargedPokemonPanel extends PokemonPanel {
 
     @Override
     public void setPokemonImageIcon(Integer pokemonId) {
-        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH_ENLARGED, IMAGE_HEIGHT_ENLARGED, pokemonId);
+        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH_ENLARGED, IMAGE_HEIGHT_ENLARGED, pokemonId, false);
         this.getPokemonImage().setIcon(IMAGE);
     }
 

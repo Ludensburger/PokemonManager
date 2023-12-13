@@ -22,13 +22,6 @@ public interface MenuGUIDesign {
         return Color.white;
     }
 
-    default Color SearchBar_COLOR_DEFAULT() {
-        return Color.white;
-    }
-
-    default Color SearchBarText_COLOR_DEFAULT() {
-        return Color.black;
-    }
 
     default Color AddPokemonButton_COLOR_DEFAULT() {
         return Color.black;

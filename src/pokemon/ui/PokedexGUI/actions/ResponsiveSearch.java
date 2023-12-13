@@ -3,7 +3,8 @@ package pokemon.ui.PokedexGUI.actions;
 import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.ui.PokedexGUI.components.PokemonPanel;
-import pokemon.ui.viewPokemonGUI.ViewPokemonGUI;
+import pokemon.ui.UIRunner;
+import pokemon.ui.ViewPokemonGUI.ViewPokemonFrame;
 import pokemon.util.AudioHandler;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -48,20 +49,17 @@ public class ResponsiveSearch {
                 } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
-
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     Pokemon selectedPokemon = getPanelPainter().getEnlargedPokemonPanel().getPokemon();
+                    System.out.println(selectedPokemon.getName());
                     try {
-                        ViewPokemonGUI viewPokemonGUI = new ViewPokemonGUI(selectedPokemon);
-                        viewPokemonGUI.setVisible(true);
-                    } catch (IOException | FontFormatException | UnsupportedAudioFileException |
-                             LineUnavailableException ex) {
+                        UIRunner.getInstance().closePokedexGUI();
+                        UIRunner.getInstance().openViewPokemonGUI(selectedPokemon);
+
+                    } catch (LineUnavailableException | IOException | UnsupportedAudioFileException |
+                             FontFormatException ex) {
                         throw new RuntimeException(ex);
                     }
-
-                    mainMenuFrame.setVisible(false);
-                    mainMenuMusic.pause();
-                    mainMenuFrame.dispose();
                 }
             }
 
@@ -70,12 +68,15 @@ public class ResponsiveSearch {
     }
 
     private void handleResponsiveSearch(JTextField textField) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+
         String activeText = textField.getText().toUpperCase();
         int CURRENT_POKEMON_SELECTED_INDEX = getPanelNavigator().getPokemonIndex();
         int TO_FIND_POKEMON_INDEX = findIndexOfPokemon(activeText);
 
         movePanelsToPokemon(TO_FIND_POKEMON_INDEX, CURRENT_POKEMON_SELECTED_INDEX);
-        getPanelPainter().paintPanels();
+        if(CURRENT_POKEMON_SELECTED_INDEX != TO_FIND_POKEMON_INDEX) {
+            getPanelPainter().paintPanels();
+        }
     }
 
     private void movePanelsToPokemon(int targetPanelIndex, int currentPanelIndex) {

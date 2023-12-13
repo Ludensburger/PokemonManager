@@ -1,7 +1,8 @@
 package pokemon.ui.PokedexGUI.components;
 
+import pokemon.ui.AddPokemonGUI.AddPokemonFrame;
 import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
-import pokemon.ui.addPokemonGUI.addPokemonGUI;
+import pokemon.ui.UIRunner;
 import pokemon.util.AudioHandler;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
@@ -17,13 +18,15 @@ import java.io.IOException;
 public class AddPokemonButton implements MenuGUIDesign {
     private JButton addPokemonButton;
     private JLabel icon;
+    private int iconWidth = 64;
+    private int iconHeight = 64;
     private static final Dimension POKEMONBUTTON_SIZE = (new Dimension(350, 100));
     private static final String FONT_NAME = "pokemonRedBlue.ttf";
     private static final String IMAGE_NAME = "pikachu8bitres.gif";
     private static final float FONT_SIZE = 18f;
 
     public AddPokemonButton(JFrame menuFrame, AudioHandler mainMenuMusic) throws IOException, FontFormatException {
-        ImageIcon IMAGE_ICON = new ImageHandler().getPokedexImage(IMAGE_NAME);
+        ImageIcon IMAGE_ICON = new ImageHandler().getPokedexImage(getIconWidth(), getIconHeight(), IMAGE_NAME, true);
 
         setIcon(new JLabel(IMAGE_ICON));
         setAddPokemonButton(new JButton(), menuFrame, mainMenuMusic);
@@ -38,7 +41,7 @@ public class AddPokemonButton implements MenuGUIDesign {
     }
 
     public void setAddPokemonButton(JButton addPokemonButton, JFrame frame, AudioHandler mainMenuMusic) throws IOException, FontFormatException {
-        Font POKEMONBUTTON_FONT = new FontHandler().getFont(FONT_NAME).deriveFont(FONT_SIZE);
+        Font POKEMONBUTTON_FONT = new FontHandler().getFont(FONT_NAME, FONT_SIZE);
 
         addPokemonButton.add(getIcon());
         addPokemonButton.setText("ADD POKEMON");
@@ -58,14 +61,11 @@ public class AddPokemonButton implements MenuGUIDesign {
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 try {
-                    addPokemonGUI addPokemonGUI = new addPokemonGUI(frame, mainMenuMusic.getClip());
-                    addPokemonGUI.setVisible(true);
-                } catch (IOException | ClassNotFoundException | LineUnavailableException |
-                         UnsupportedAudioFileException | FontFormatException | CloneNotSupportedException ex) {
+                    UIRunner.getInstance().openAddPokemonGUI();
+                    UIRunner.getInstance().closePokedexGUI();
+                } catch (IOException | LineUnavailableException ex) {
                     throw new RuntimeException(ex);
                 }
-                mainMenuMusic.pause();
-                frame.setVisible(false);
             }
 
             @Override
@@ -90,5 +90,21 @@ public class AddPokemonButton implements MenuGUIDesign {
                     icon.getBorder()));
 
         this.icon = icon;
+    }
+
+    public int getIconWidth() {
+        return iconWidth;
+    }
+
+    public void setIconWidth(int iconWidth) {
+        this.iconWidth = iconWidth;
+    }
+
+    public int getIconHeight() {
+        return iconHeight;
+    }
+
+    public void setIconHeight(int iconHeight) {
+        this.iconHeight = iconHeight;
     }
 }

@@ -1,11 +1,8 @@
-package pokemon.ui.viewPokemonGUI.components;
+package pokemon.ui.ViewPokemonGUI.components;
 
-import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
-import pokemon.ui.PokedexGUI.PokedexGUI;
-import pokemon.ui.PokedexGUI.components.MenuTitleBar;
-import pokemon.ui.UIRunner;
+import pokemon.ui.ViewPokemonGUI.ViewPokemonFrame;
 import pokemon.util.AudioHandler;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
@@ -14,13 +11,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 
-public class ViewPokemonComponentHandler {
+public class ViewPokemonComponentHandler implements Cloneable {
+
     private Pokemon selectedPokemon;
     private JLabel labelBackground;
     private JPanel titleBarContainer;
@@ -35,8 +29,7 @@ public class ViewPokemonComponentHandler {
     private static final Dimension BODY_CONTAINER_SIZE = (new Dimension(500, 570));
     private static final Dimension TYPE_IMAGE_CONTAINER_SIZE  = (new Dimension(500,50));
     private static final Dimension POKEMON_IMAGE_CONTAINER_SIZE = (new Dimension(500, 300));
-    private static final Dimension INFO_CONTAINER_SIZE = (new Dimension(500, 170));
-    private static final Dimension BUTTON_SIZE = (new Dimension(20,100));
+    private static final Dimension INFO_CONTAINER_SIZE = (new Dimension(500, 270));
     private static final int POKEMON_WIDTH_DEFAULT = 300;
     private static final int POKEMON_HEIGHT_DEFAULT = 300;
     private static final int TYPE_WIDTH_DEFAULT = 100;
@@ -48,8 +41,8 @@ public class ViewPokemonComponentHandler {
 
     public ViewPokemonComponentHandler(JFrame frame, Pokemon pokemon, ImageIcon backgroundImage) throws IOException, FontFormatException, UnsupportedAudioFileException, LineUnavailableException {
         setViewPokemonMusic("rustborocity.wav");
-        setViewPokemonFrame(frame);
         setSelectedPokemon(pokemon);
+        setViewPokemonFrame(frame);
         setTitleBarContainer(new ViewPokemonTitleBar(getViewPokemonFrame(), getViewPokemonMusic()).getTitlePanel());
         setHeaderContainer(new JPanel());
         setTypeImageContainer(new JPanel());
@@ -93,7 +86,7 @@ public class ViewPokemonComponentHandler {
     }
 
     public void setHeaderContainer(JPanel headerContainer) throws IOException, FontFormatException {
-        Font HEADER_FONT = new FontHandler().getFont(FONT_NAME).deriveFont(HEADER_FONT_SIZE);
+        Font HEADER_FONT = new FontHandler().getFont(FONT_NAME, HEADER_FONT_SIZE);
 
         headerContainer.setLayout(new BorderLayout());
         headerContainer.setOpaque(true);
@@ -142,8 +135,8 @@ public class ViewPokemonComponentHandler {
         return selectedPokemon;
     }
 
-    public void setSelectedPokemon(Pokemon selectedPokemon) {
-        this.selectedPokemon = selectedPokemon;
+    public void setSelectedPokemon(Pokemon pokemon) {
+        this.selectedPokemon = pokemon;
     }
 
     public JPanel getTypeImageContainer() {
@@ -156,7 +149,9 @@ public class ViewPokemonComponentHandler {
         ImageIcon PRIMARY_TYPE_IMAGE = new ImageHandler().getPokemonTypeIcon(
                 TYPE_WIDTH_DEFAULT,
                 TYPE_HEIGHT_DEFAULT,
-                primaryTypeFileName);
+                primaryTypeFileName,
+                false
+        );
 
         typeImageContainer.setPreferredSize(TYPE_IMAGE_CONTAINER_SIZE);
         typeImageContainer.setOpaque(false);
@@ -171,7 +166,9 @@ public class ViewPokemonComponentHandler {
             ImageIcon SECONDARY_TYPE_IMAGE = new ImageHandler().getPokemonTypeIcon(
                     TYPE_WIDTH_DEFAULT,
                     TYPE_HEIGHT_DEFAULT,
-                    secondaryTypeFileName);
+                    secondaryTypeFileName,
+                    false
+            );
 
 
             JLabel secondaryTypeLabel = new JLabel(SECONDARY_TYPE_IMAGE);
@@ -186,7 +183,7 @@ public class ViewPokemonComponentHandler {
     }
 
     public void setPokemonImageContainer(JPanel pokemonImageContainer) throws IOException, FontFormatException {
-        ImageIcon IMAGE = new ImageHandler().getPokemonImage(POKEMON_WIDTH_DEFAULT, POKEMON_HEIGHT_DEFAULT, getSelectedPokemon().getId());
+        ImageIcon IMAGE = new ImageHandler().getPokemonImage(POKEMON_WIDTH_DEFAULT, POKEMON_HEIGHT_DEFAULT, getSelectedPokemon().getId(), false);
 
         pokemonImageContainer.setLayout(new BorderLayout());
         pokemonImageContainer.setPreferredSize(POKEMON_IMAGE_CONTAINER_SIZE);
@@ -203,7 +200,7 @@ public class ViewPokemonComponentHandler {
     }
 
     public void setInfoContainer(JPanel infoContainer) throws IOException, FontFormatException {
-        Font BODY_FONT = new FontHandler().getFont(FONT_NAME).deriveFont(BODY_FONT_SIZE);
+        Font BODY_FONT = new FontHandler().getFont(FONT_NAME, BODY_FONT_SIZE);
 
         infoContainer.setPreferredSize(INFO_CONTAINER_SIZE);
 
@@ -229,5 +226,24 @@ public class ViewPokemonComponentHandler {
 
     public void setViewPokemonFrame(JFrame viewPokemonFrame) {
         this.viewPokemonFrame = viewPokemonFrame;
+    }
+
+    @Override
+    public ViewPokemonComponentHandler clone() {
+        try {
+            ViewPokemonComponentHandler clone = (ViewPokemonComponentHandler) super.clone();
+
+            clone.setSelectedPokemon(getSelectedPokemon());
+            clone.setTypeImageContainer(new JPanel());
+            clone.setHeaderContainer(new JPanel());
+            clone.setPokemonImageContainer(new JPanel());
+            clone.setInfoContainer(new JPanel());
+            clone.setBodyContainer(new JPanel());
+            clone.setLabelBackground(new JLabel(getLabelBackground().getIcon()));
+
+            return clone;
+        } catch (CloneNotSupportedException | IOException | FontFormatException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -2,6 +2,7 @@ package pokemon.ui.PokedexGUI.components;
 
 import pokemon.Pokemon;
 import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
+import pokemon.ui.PokedexGUI.design.PanelColors;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
@@ -9,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class PokemonPanel implements MenuGUIDesign {
+public class PokemonPanel implements MenuGUIDesign, PanelColors {
     private JPanel pokemonPanel;
     private JPanel components;
     private JLabel background;
@@ -17,6 +18,8 @@ public class PokemonPanel implements MenuGUIDesign {
     private JLabel pokemonName;
     private JLabel pokemonImage;
     private Pokemon pokemon;
+    private Font font;
+
     private static final Dimension PANEL_SIZE_DEFAULT = (new Dimension(560, 80));
     private static final Dimension COMPONENT_SIZE_DEFAULT = (new Dimension(400, 105));
     private static final int IMAGE_WIDTH_DEFAULT = 86;
@@ -26,6 +29,7 @@ public class PokemonPanel implements MenuGUIDesign {
 
 
     public PokemonPanel() throws IOException, FontFormatException {
+        setFont(new FontHandler().getFont(FONT_NAME, FONT_SIZE));
         setPokemonId(new JLabel());
         setPokemonName(new JLabel());
         setPokemonImage(new JLabel());
@@ -54,8 +58,9 @@ public class PokemonPanel implements MenuGUIDesign {
 
 
     public void setPokemonPanel(JPanel pokemonPanel) {
+
             pokemonPanel.setPreferredSize(PANEL_SIZE_DEFAULT);
-            pokemonPanel.setBackground(PokemonPanels_COLOR_DEFAULT());
+            pokemonPanel.setBackground(PANEL_BACKGROUND_COLOR_DEFAULT);
             pokemonPanel.setOpaque(false);
 
             pokemonPanel.add(getBackground());
@@ -65,16 +70,15 @@ public class PokemonPanel implements MenuGUIDesign {
     }
 
     public void setComponents(JPanel componentsPanel) {
+
             componentsPanel.setPreferredSize(COMPONENT_SIZE_DEFAULT);
-            componentsPanel.setBackground(PokemonPanels_COLOR_DEFAULT());
+            componentsPanel.setBackground(PANEL_BACKGROUND_COLOR_DEFAULT);
             componentsPanel.setOpaque(true);
             componentsPanel.setLayout(new BorderLayout());
 
             componentsPanel.add(getPokemonImage(), BorderLayout.WEST);
             componentsPanel.add(getPokemonId(), BorderLayout.CENTER);
             componentsPanel.add(getPokemonName(), BorderLayout.EAST);
-
-
 
         this.components = componentsPanel;
     }
@@ -83,11 +87,10 @@ public class PokemonPanel implements MenuGUIDesign {
         this.background = backgroundLabel;
     }
 
-    public void setPokemonId(JLabel pokemonId) throws IOException, FontFormatException {
-        Font ID_FONT = new FontHandler().getFont(FONT_NAME).deriveFont(FONT_SIZE);
+    public void setPokemonId(JLabel pokemonId) {
 
-            pokemonId.setForeground(PokemonPanelsText_COLOR_DEFAULT());
-            pokemonId.setFont(ID_FONT);
+            pokemonId.setForeground(PANEL_FOREGROUND_COLOR_DEFAULT);
+            pokemonId.setFont(getFont());
             pokemonId.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createEmptyBorder(0, 20, 0, 0),
                     pokemonId.getBorder()));
@@ -95,11 +98,10 @@ public class PokemonPanel implements MenuGUIDesign {
         this.pokemonId = pokemonId;
     }
 
-    public void setPokemonName(JLabel pokemonName) throws IOException, FontFormatException {
-        Font NAME_FONT = new FontHandler().getFont(FONT_NAME).deriveFont(FONT_SIZE);
+    public void setPokemonName(JLabel pokemonName) {
 
-            pokemonName.setForeground(PokemonPanelsText_COLOR_DEFAULT());
-            pokemonName.setFont(NAME_FONT);
+            pokemonName.setForeground(PANEL_FOREGROUND_COLOR_DEFAULT);
+            pokemonName.setFont(getFont());
             pokemonName.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createEmptyBorder(0, 0, 0, 30),
                     pokemonName.getBorder()));
@@ -126,7 +128,7 @@ public class PokemonPanel implements MenuGUIDesign {
 
     public void setPokemonImageIcon(Integer pokemonId) {
         //  Set image resolution
-        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH_DEFAULT, IMAGE_HEIGHT_DEFAULT, pokemonId);
+        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH_DEFAULT, IMAGE_HEIGHT_DEFAULT, pokemonId, false);
         this.getPokemonImage().setIcon(IMAGE);
     }
 
@@ -139,6 +141,14 @@ public class PokemonPanel implements MenuGUIDesign {
 
     public Pokemon getPokemon() {
         return pokemon;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
     }
 
 }

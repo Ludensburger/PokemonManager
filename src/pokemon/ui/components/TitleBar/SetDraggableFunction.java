@@ -1,4 +1,4 @@
-package pokemon.ui.PokedexGUI.actions;
+package pokemon.ui.components.TitleBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class DraggableTitleBar implements MouseListener, MouseMotionListener{
+public class SetDraggableFunction implements MouseListener, MouseMotionListener{
         private Point START_DRAG;
 
         private Point START_LOCATION;
@@ -15,7 +15,7 @@ public class DraggableTitleBar implements MouseListener, MouseMotionListener{
 
         private JFrame FRAME;
 
-    public DraggableTitleBar(JPanel targetPanel, JFrame targetFrame) {
+    public SetDraggableFunction(JPanel targetPanel, JFrame targetFrame) {
             setSTART_DRAG(new Point());
             setSTART_LOCATION(new Point());
             setTARGET(targetPanel);
