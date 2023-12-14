@@ -2,6 +2,8 @@ package pokemon.ui.AddPokemonGUI.components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DescriptionBoxContainer {
     private JPanel container;
@@ -10,6 +12,7 @@ public class DescriptionBoxContainer {
     private Font font;
     private static final Dimension LABEL_SIZE = (new Dimension(500, 30));
     private static final Dimension DESCRIPTION_CONTAINER_SIZE = (new Dimension(500, 200));
+    private static final int MAX_DESCRIPTION_WORD_COUNT = 180;
     private static Color BACKGROUND_COLOR;
     private static  Color FOREGROUND_COLOR;
 
@@ -39,7 +42,7 @@ public class DescriptionBoxContainer {
     }
 
     public void setDescriptionLabel(JLabel descriptionLabel) {
-        descriptionLabel.setText("DESCRIPTION");
+        descriptionLabel.setText("DESCRIPTION (MAX " + MAX_DESCRIPTION_WORD_COUNT + ")");
         descriptionLabel.setForeground(getForegroundColor());
         descriptionLabel.setBackground(getBackgroundColor());
         descriptionLabel.setFont(getFont());
@@ -67,6 +70,20 @@ public class DescriptionBoxContainer {
                 descriptionTextArea.getBorder()));
         descriptionTextArea.setLineWrap(true);
         descriptionTextArea.setWrapStyleWord(true);
+
+        descriptionTextArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                if(descriptionTextArea.getText().length() > MAX_DESCRIPTION_WORD_COUNT + 1) {
+                    e.consume();
+                    String shortened = descriptionTextArea.getText().substring(0, MAX_DESCRIPTION_WORD_COUNT);
+                    descriptionTextArea.setText(shortened);
+                } else if (descriptionTextArea.getText().length() > MAX_DESCRIPTION_WORD_COUNT) {
+                    e.consume();
+                }
+            }
+        });
 
         this.descriptionTextArea = descriptionTextArea;
     }

@@ -60,11 +60,9 @@ public class UIRunner {
 
     public void restartPokedexGUI() throws UnsupportedAudioFileException, LineUnavailableException, IOException, FontFormatException, CloneNotSupportedException, ClassNotFoundException {
         getPokedexGUI().dispose();
-        Pokedex pokedex = new Pokedex();
-        pokedex.startPokedex();
-        setPokedex(pokedex);
-        setPokedexGUI(new PokedexFrame(pokedex));
-        openPokedexGUI();
+        UIRunner uiRunner = new UIRunner();
+        setInstance(uiRunner);
+        uiRunner.startPokedexGUI();
     }
 
     public void openViewPokemonGUI(Pokemon pokemon) throws LineUnavailableException, IOException, UnsupportedAudioFileException, FontFormatException {

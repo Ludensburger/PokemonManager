@@ -59,6 +59,7 @@ public class PanelPainter implements PanelColors {
     }
 
     public void setPokedex(Pokedex pokedex) {
+        System.out.println("new pokedex!");
         this.pokedex = pokedex;
     }
 

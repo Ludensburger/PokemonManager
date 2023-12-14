@@ -60,6 +60,21 @@ public class ViewPokemonButtonsContainer {
         backButton.setBackground(getBackgroundColor());
         backButton.setFont(getFont());
         backButton.setFocusPainted(false);
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == getBackButton()) {
+                    try {
+                        UIRunner.getInstance().openPokedexGUI();
+                    } catch (LineUnavailableException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    
+                    UIRunner.getInstance().closeViewPokemonGUI();
+                }
+            }
+        });
         this.backButton = backButton;
     }
 

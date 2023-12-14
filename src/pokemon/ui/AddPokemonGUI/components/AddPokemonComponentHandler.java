@@ -196,6 +196,10 @@ public class AddPokemonComponentHandler {
                 setSecondaryType((PokemonType) getPokemonTypeContainer().getSecondaryTypeJComboBox().getSelectedItem());
 
                 if(e.getSource() == getSaveButton()) {
+                    if(getPrimaryType() == getSecondaryType()) {
+                        JOptionPane.showMessageDialog(null, "You can't have two of the same types!");
+                        return;
+                    }
                     Pokemon.PokemonBuilder newPokemon = new Pokemon.PokemonBuilder(getPokemonName(), getPokemonId());
                     newPokemon.setDescription(getPokemonDescription());
                     newPokemon.setPrimaryType(getPrimaryType());
