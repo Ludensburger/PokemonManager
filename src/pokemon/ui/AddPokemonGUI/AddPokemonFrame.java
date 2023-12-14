@@ -2,7 +2,6 @@ package pokemon.ui.AddPokemonGUI;
 
 import pokemon.Pokedex;
 import pokemon.ui.AddPokemonGUI.components.AddPokemonComponentHandler;
-import pokemon.ui.ViewPokemonGUI.components.ViewPokemonComponentHandler;
 import pokemon.ui.components.Frame.FrameModel;
 
 import javax.sound.sampled.LineUnavailableException;

@@ -1,7 +1,6 @@
 package pokemon.ui.PokedexGUI.components;
 
 import pokemon.Pokemon;
-import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.ui.PokedexGUI.design.PanelColors;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
@@ -10,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class PokemonPanel implements MenuGUIDesign, PanelColors {
+public class PokemonPanel implements PanelColors {
     private JPanel pokemonPanel;
     private JPanel components;
     private JLabel background;

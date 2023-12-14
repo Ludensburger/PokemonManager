@@ -3,7 +3,6 @@ package pokemon.ui.components.Frame;
 import pokemon.util.AudioHandler;
 import pokemon.util.ImageHandler;
 
-import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;

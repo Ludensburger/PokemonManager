@@ -3,7 +3,6 @@ package pokemon.ui.PokedexGUI.components;
 import pokemon.Pokedex;
 import pokemon.ui.PokedexGUI.actions.PanelNavigator;
 import pokemon.ui.PokedexGUI.actions.PanelPainter;
-import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.util.AudioHandler;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -13,7 +12,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MenuComponentHandler implements MenuGUIDesign {
+public class MenuComponentHandler {
     private JLabel labelBackground;
     private JPanel pokemonPanelsContainer;
     private JPanel headerContainer;

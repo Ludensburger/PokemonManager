@@ -4,7 +4,6 @@ import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.ui.PokedexGUI.components.EnlargedPokemonPanel;
 import pokemon.ui.PokedexGUI.components.PokemonPanel;
-import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.ui.PokedexGUI.design.PanelColors;
 import pokemon.util.AudioHandler;
 
