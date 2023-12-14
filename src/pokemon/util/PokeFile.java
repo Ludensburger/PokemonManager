@@ -14,7 +14,7 @@ public class PokeFile {
      */
     private static File createFile() {
         String WORKING_DIR = System.getProperty("user.dir");
-        String FOLDER_PATH = WORKING_DIR + File.separator + "src" + File.separator + "dat" + File.separator;
+        String FOLDER_PATH = WORKING_DIR + File.separator + "src" + File.separator + "data" + File.separator;
         String FILE_NAME = "pokedex_data.txt";
         String FILE_PATH = FOLDER_PATH + FILE_NAME;
 

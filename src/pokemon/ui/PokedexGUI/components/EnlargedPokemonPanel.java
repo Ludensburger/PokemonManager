@@ -3,54 +3,61 @@ package pokemon.ui.PokedexGUI.components;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
 public class EnlargedPokemonPanel extends PokemonPanel {
+    private JPanel components;
 
-    public EnlargedPokemonPanel() throws CloneNotSupportedException, IOException, FontFormatException {
-        super.clone();
+    private JPanel pokemonPanel;
+
+    private static final Dimension PANEL_SIZE_ENLARGED = (new Dimension(560, 560));
+    private static final Dimension COMPONENT_SIZE_ENLARGED = (new Dimension(560, 560));
+    private static final int IMAGE_WIDTH_ENLARGED = 512;
+    private static final int IMAGE_HEIGHT_ENLARGED = 512;
+
+
+    public EnlargedPokemonPanel() throws IOException, FontFormatException {
+        super();
     }
 
     @Override
-    public void setPokemonImage(Integer pokemonId) {
-        int IMAGE_WIDTH = 512;
-        int IMAGE_HEIGHT = 512;
-
-        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH, IMAGE_HEIGHT, pokemonId);
-
+    public void setPokemonImageIcon(Integer pokemonId) {
+        ImageIcon IMAGE = new ImageHandler().getPokemonImage(IMAGE_WIDTH_ENLARGED, IMAGE_HEIGHT_ENLARGED, pokemonId, false);
         this.getPokemonImage().setIcon(IMAGE);
     }
 
     @Override
-    public void decoratePokemonPanel() throws IOException, FontFormatException {
-        //  Setting fonts
-        Font FONT = new FontHandler().getFont("pokemonRedBlue.ttf");
-        getPokemonId().setFont(FONT);
-        getPokemonName().setFont(FONT);
+    public void setPokemonPanel(JPanel pokemonPanel) {
+        pokemonPanel.setPreferredSize(PANEL_SIZE_ENLARGED);
+        pokemonPanel.setOpaque(false);
 
-        //  Setting pokemon panel wrapper
-        getPokemonPanel().setBackground(PokemonPanels_COLOR_DEFAULT());
-        getPokemonPanel().setPreferredSize(PokemonPanels_SIZE_ENLARGED());
-        getPokemonPanel().setOpaque(false);
+        pokemonPanel.add(getBackground());
+        pokemonPanel.add(getComponents());
 
-        //  Setting components container
-        getComponents().setPreferredSize(ComponentsContainer_SIZE_ENLARGED());
-        getComponents().setLayout(new BorderLayout());
-        getComponents().setOpaque(true);
+        this.pokemonPanel = pokemonPanel;
+    }
 
-        //  Adds background and components to Pokemon panel
-        getPokemonPanel().add(getBackground());
-        getPokemonPanel().add(getComponents());
+    @Override
+    public void setComponents(JPanel componentsPanel) {
+        componentsPanel.setPreferredSize(COMPONENT_SIZE_ENLARGED);
+        componentsPanel.setBackground(PokemonPanels_COLOR_DEFAULT());
+        componentsPanel.setOpaque(false);
+        componentsPanel.setLayout(new BorderLayout());
 
-        //  Fills components container with background (color), Pokemon image, Pokemon id, and Pokemon name
-        getComponents().setBackground(PokemonPanels_COLOR_DEFAULT());
-        getComponents().add(getPokemonImage(), BorderLayout.CENTER);
-        getComponents().add(getPokemonId(), BorderLayout.NORTH);
-        getComponents().add(getPokemonName(), BorderLayout.SOUTH);
-        getPokemonName().setForeground(PokemonPanelsText_COLOR_DEFAULT());
-        getPokemonId().setForeground(PokemonPanelsText_COLOR_DEFAULT());
+        componentsPanel.add(getPokemonImage(), BorderLayout.CENTER);
+        componentsPanel.add(getPokemonId(), BorderLayout.NORTH);
+        componentsPanel.add(getPokemonName(), BorderLayout.SOUTH);
+
+        this.components = componentsPanel;
+    }
+
+    @Override
+    public JPanel getComponents() { return components; }
+
+    @Override
+    public JPanel getPokemonPanel() {
+        return pokemonPanel;
     }
 }
