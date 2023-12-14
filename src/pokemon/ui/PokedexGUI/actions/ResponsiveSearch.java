@@ -4,7 +4,6 @@ import pokemon.Pokedex;
 import pokemon.Pokemon;
 import pokemon.ui.PokedexGUI.components.PokemonPanel;
 import pokemon.ui.UIRunner;
-import pokemon.ui.ViewPokemonGUI.ViewPokemonFrame;
 import pokemon.util.AudioHandler;
 
 import javax.sound.sampled.LineUnavailableException;

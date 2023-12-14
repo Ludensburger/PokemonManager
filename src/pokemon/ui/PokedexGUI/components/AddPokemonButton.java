@@ -1,21 +1,18 @@
 package pokemon.ui.PokedexGUI.components;
 
-import pokemon.ui.AddPokemonGUI.AddPokemonFrame;
-import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.ui.UIRunner;
 import pokemon.util.AudioHandler;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-public class AddPokemonButton implements MenuGUIDesign {
+public class AddPokemonButton {
     private JButton addPokemonButton;
     private JLabel icon;
     private int iconWidth = 64;
@@ -24,6 +21,9 @@ public class AddPokemonButton implements MenuGUIDesign {
     private static final String FONT_NAME = "pokemonRedBlue.ttf";
     private static final String IMAGE_NAME = "pikachu8bitres.gif";
     private static final float FONT_SIZE = 18f;
+    private static final Color BUTTON_COLOR_DEFAULT = Color.black;
+    private static final Color BUTTON_COLOR_SELECTED = Color.red;
+    private static final Color TEXT_COLOR_DEFAULT = Color.white;
 
     public AddPokemonButton(JFrame menuFrame, AudioHandler mainMenuMusic) throws IOException, FontFormatException {
         ImageIcon IMAGE_ICON = new ImageHandler().getPokedexImage(getIconWidth(), getIconHeight(), IMAGE_NAME, true);
@@ -50,8 +50,8 @@ public class AddPokemonButton implements MenuGUIDesign {
         addPokemonButton.setBorder(null);
         addPokemonButton.setBorderPainted(false);
         addPokemonButton.setFocusPainted(false);
-        addPokemonButton.setBackground(AddPokemonButton_COLOR_DEFAULT());
-        addPokemonButton.setForeground(AddPokemonButtonText_COLOR_DEFAULT());
+        addPokemonButton.setBackground(BUTTON_COLOR_DEFAULT);
+        addPokemonButton.setForeground(TEXT_COLOR_DEFAULT);
         addPokemonButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(0, 0, 0, 10),
                 addPokemonButton.getBorder()));
@@ -71,13 +71,13 @@ public class AddPokemonButton implements MenuGUIDesign {
             @Override
             public void mouseEntered(MouseEvent e){
                 super.mouseEntered(e);
-                getAddPokemonButton().setBackground(AddPokemonButton_COLOR_SELECTED());
+                getAddPokemonButton().setBackground(BUTTON_COLOR_SELECTED);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                getAddPokemonButton().setBackground(AddPokemonButton_COLOR_DEFAULT());
+                getAddPokemonButton().setBackground(BUTTON_COLOR_DEFAULT);
             }
         });
 

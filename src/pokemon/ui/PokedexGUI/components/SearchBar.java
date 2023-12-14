@@ -2,7 +2,6 @@ package pokemon.ui.PokedexGUI.components;
 
 import pokemon.ui.PokedexGUI.actions.PanelPainter;
 import pokemon.ui.PokedexGUI.actions.ResponsiveSearch;
-import pokemon.ui.PokedexGUI.design.MenuGUIDesign;
 import pokemon.util.AudioHandler;
 import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
@@ -11,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class SearchBar implements MenuGUIDesign {
+public class SearchBar {
 
     private JPanel searchPanel;
     private JTextField searchBar;

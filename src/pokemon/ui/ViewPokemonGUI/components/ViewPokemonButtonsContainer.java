@@ -70,7 +70,7 @@ public class ViewPokemonButtonsContainer {
                     } catch (LineUnavailableException | IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    
+
                     UIRunner.getInstance().closeViewPokemonGUI();
                 }
             }

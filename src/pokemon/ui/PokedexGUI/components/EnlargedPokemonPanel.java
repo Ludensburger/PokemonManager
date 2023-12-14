@@ -1,6 +1,5 @@
 package pokemon.ui.PokedexGUI.components;
 
-import pokemon.util.FontHandler;
 import pokemon.util.ImageHandler;
 
 import javax.swing.*;
@@ -42,7 +41,7 @@ public class EnlargedPokemonPanel extends PokemonPanel {
     @Override
     public void setComponents(JPanel componentsPanel) {
         componentsPanel.setPreferredSize(COMPONENT_SIZE_ENLARGED);
-        componentsPanel.setBackground(PokemonPanels_COLOR_DEFAULT());
+        componentsPanel.setBackground(PANEL_BACKGROUND_COLOR_DEFAULT);
         componentsPanel.setOpaque(false);
         componentsPanel.setLayout(new BorderLayout());
 
